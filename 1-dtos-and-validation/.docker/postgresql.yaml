@@ -1,0 +1,23 @@
+# Run command:
+# docker compose -f .docker/postgresql.yaml up --build -d
+#
+# Stop + remove volumes:
+# docker compose -f .docker/postgresql.yaml down -v
+#
+# EN: Local PostgreSQL for the DTOs & Validation demo (TypeORM).
+
+services:
+  postgres:
+    image: docker.io/library/postgres:16-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: dto_validation_demo
+    volumes:
+      - dto_validation_pg:/var/lib/postgresql/data
+
+volumes:
+  dto_validation_pg:
+    driver: local
