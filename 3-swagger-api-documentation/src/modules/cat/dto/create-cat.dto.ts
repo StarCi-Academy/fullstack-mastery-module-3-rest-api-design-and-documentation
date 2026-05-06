@@ -1,3 +1,7 @@
+﻿/**
+ * DTO validate payload tao.
+ * (EN: DTO validates creation payload.)
+ */
 import {
     ApiProperty 
 } from "@nestjs/swagger"
@@ -9,7 +13,7 @@ import {
 } from "class-validator"
 
 /**
- * DTO tạo mèo — **Swagger** cần `@ApiProperty` vì type TS bị erase khi build (EN: create-cat DTO; Swagger needs runtime metadata from `@ApiProperty`).
+ * DTO táº¡o mÃ¨o â€” **Swagger** cáº§n `@ApiProperty` vÃ¬ type TS bá»‹ erase khi build (EN: create-cat DTO; Swagger needs runtime metadata from `@ApiProperty`).
  */
 export class CreateCatDto {
     @ApiProperty({

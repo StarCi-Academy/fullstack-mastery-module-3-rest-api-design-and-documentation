@@ -1,3 +1,7 @@
+﻿/**
+ * Service xu ly logic nghiep vu cua User.
+ * (EN: Business logic service for User.)
+ */
 import {
     faker 
 } from "@faker-js/faker"
@@ -18,8 +22,8 @@ import {
 } from "./user.entity"
 
 /**
- * Service quản lý user trên PostgreSQL qua TypeORM — nghiệp vụ CRUD tách khỏi controller (EN: user persistence via TypeORM; CRUD logic stays out of controllers).
- * Tuân thủ repo rule: không nhồi logic vào controller (EN: keeps controllers free of business rules).
+ * Service quáº£n lÃ½ user trÃªn PostgreSQL qua TypeORM â€” nghiá»‡p vá»¥ CRUD tÃ¡ch khá»i controller (EN: user persistence via TypeORM; CRUD logic stays out of controllers).
+ * TuÃ¢n thá»§ repo rule: khÃ´ng nhá»“i logic vÃ o controller (EN: keeps controllers free of business rules).
  */
 @Injectable()
 export class UserService {
@@ -29,20 +33,20 @@ export class UserService {
     ) {}
 
     /**
-     * Xóa toàn bộ bản ghi `users` — chỉ dùng cho endpoint demo dọn seed (EN: wipe all rows; demo cleanup only).
+     * XÃ³a toÃ n bá»™ báº£n ghi `users` â€” chá»‰ dÃ¹ng cho endpoint demo dá»n seed (EN: wipe all rows; demo cleanup only).
      *
-     * @returns Promise<void> — Hoàn tất sau khi bảng rỗng (EN: resolves when table is empty).
-     * @sideEffects DELETE toàn bộ trên bảng `users` (EN: deletes every row in `users`).
+     * @returns Promise<void> â€” HoÃ n táº¥t sau khi báº£ng rá»—ng (EN: resolves when table is empty).
+     * @sideEffects DELETE toÃ n bá»™ trÃªn báº£ng `users` (EN: deletes every row in `users`).
      */
     async removeAll(): Promise<void> {
         await this.usersRepo.clear()
     }
 
     /**
-     * Tạo đúng một user với `name`/`email` từ **@faker-js/faker** — `faker.seed(1337)` để output ổn định cho tài liệu (EN: insert one user; fixed faker seed for reproducible lesson samples).
+     * Táº¡o Ä‘Ãºng má»™t user vá»›i `name`/`email` tá»« **@faker-js/faker** â€” `faker.seed(1337)` Ä‘á»ƒ output á»•n Ä‘á»‹nh cho tÃ i liá»‡u (EN: insert one user; fixed faker seed for reproducible lesson samples).
      *
-     * @returns Promise<User> — Bản ghi vừa tạo (EN: newly created row).
-     * @sideEffects INSERT một dòng (EN: inserts one row).
+     * @returns Promise<User> â€” Báº£n ghi vá»«a táº¡o (EN: newly created row).
+     * @sideEffects INSERT má»™t dÃ²ng (EN: inserts one row).
      */
     async seedOneWithFaker(): Promise<User> {
         faker.seed(1337)
@@ -62,10 +66,10 @@ export class UserService {
     }
 
     /**
-     * Map entity → DTO phẳng trả API (EN: map entity to flat API DTO).
+     * Map entity â†’ DTO pháº³ng tráº£ API (EN: map entity to flat API DTO).
      *
-     * @param row - Bản ghi ORM (EN: ORM row).
-     * @returns User — Payload JSON cho client (EN: JSON payload for clients).
+     * @param row - Báº£n ghi ORM (EN: ORM row).
+     * @returns User â€” Payload JSON cho client (EN: JSON payload for clients).
      */
     private toUser(row: UserEntity): User {
         return {
@@ -76,15 +80,15 @@ export class UserService {
     }
 
     /**
-     * Sinh id ngắn chưa tồn tại — retry giới hạn để tránh vòng lặp vô hạn (EN: generate short unused id with bounded retries).
+     * Sinh id ngáº¯n chÆ°a tá»“n táº¡i â€” retry giá»›i háº¡n Ä‘á»ƒ trÃ¡nh vÃ²ng láº·p vÃ´ háº¡n (EN: generate short unused id with bounded retries).
      *
-     * @returns Promise<string> — Id dùng cho `POST /users` (EN: id for new user create).
+     * @returns Promise<string> â€” Id dÃ¹ng cho `POST /users` (EN: id for new user create).
      */
     private async nextUniqueShortId(): Promise<string> {
-        // Giới hạn số lần thử để tránh treo nếu entropy kém (EN: cap attempts to avoid a tight loop on bad luck).
+        // Giá»›i háº¡n sá»‘ láº§n thá»­ Ä‘á»ƒ trÃ¡nh treo náº¿u entropy kÃ©m (EN: cap attempts to avoid a tight loop on bad luck).
         for (let attempt = 0; attempt < 32; attempt += 1) {
             const candidate = Math.random().toString(36).substring(7)
-            // Kiểm tra trùng khóa trước khi insert (EN: check duplicate key before insert).
+            // Kiá»ƒm tra trÃ¹ng khÃ³a trÆ°á»›c khi insert (EN: check duplicate key before insert).
             const exists = await this.usersRepo.exist({
                 where: {
                     id: candidate 
@@ -98,12 +102,12 @@ export class UserService {
     }
 
     /**
-     * Đọc toàn bộ user đang lưu (EN: read all stored users).
+     * Äá»c toÃ n bá»™ user Ä‘ang lÆ°u (EN: read all stored users).
      *
-     * @returns Promise<User[]> — Danh sách theo id tăng dần (EN: list ordered by id ascending).
+     * @returns Promise<User[]> â€” Danh sÃ¡ch theo id tÄƒng dáº§n (EN: list ordered by id ascending).
      */
     async findAll(): Promise<User[]> {
-        // Order cố định giúp curl dễ đối chiếu giữa các lần chạy (EN: stable order helps curl comparisons across runs).
+        // Order cá»‘ Ä‘á»‹nh giÃºp curl dá»… Ä‘á»‘i chiáº¿u giá»¯a cÃ¡c láº§n cháº¡y (EN: stable order helps curl comparisons across runs).
         const rows = await this.usersRepo.find({
             order: {
                 id: "ASC" 
@@ -113,11 +117,11 @@ export class UserService {
     }
 
     /**
-     * Tìm user theo id hoặc fail nhanh với 404 (EN: find by id or fail fast with 404 semantics).
+     * TÃ¬m user theo id hoáº·c fail nhanh vá»›i 404 (EN: find by id or fail fast with 404 semantics).
      *
-     * @param id - Khóa user (EN: user id).
-     * @returns Promise<User> — Bản ghi tìm thấy (EN: matched record).
-     * @sideEffects Ném NotFoundException khi không có bản ghi (EN: throws NotFoundException when missing).
+     * @param id - KhÃ³a user (EN: user id).
+     * @returns Promise<User> â€” Báº£n ghi tÃ¬m tháº¥y (EN: matched record).
+     * @sideEffects NÃ©m NotFoundException khi khÃ´ng cÃ³ báº£n ghi (EN: throws NotFoundException when missing).
      */
     async findOne(id: string): Promise<User> {
         const row = await this.usersRepo.findOne({
@@ -132,11 +136,11 @@ export class UserService {
     }
 
     /**
-     * Tạo user mới với id ngẫu nhiên ngắn (EN: create user with short random id).
+     * Táº¡o user má»›i vá»›i id ngáº«u nhiÃªn ngáº¯n (EN: create user with short random id).
      *
-     * @param payload - name/email tùy chọn (EN: optional name/email).
-     * @returns Promise<User> — Bản ghi mới đã persist (EN: newly persisted record).
-     * @sideEffects INSERT vào PostgreSQL (EN: inserts into PostgreSQL).
+     * @param payload - name/email tÃ¹y chá»n (EN: optional name/email).
+     * @returns Promise<User> â€” Báº£n ghi má»›i Ä‘Ã£ persist (EN: newly persisted record).
+     * @sideEffects INSERT vÃ o PostgreSQL (EN: inserts into PostgreSQL).
      */
     async create(payload: Partial<User>): Promise<User> {
         const id = await this.nextUniqueShortId()
@@ -150,12 +154,12 @@ export class UserService {
     }
 
     /**
-     * PUT: ghi đè name/email (fallback giữ giá trị cũ nếu field thiếu) (EN: PUT overwrites name/email, falling back to previous values when missing).
+     * PUT: ghi Ä‘Ã¨ name/email (fallback giá»¯ giÃ¡ trá»‹ cÅ© náº¿u field thiáº¿u) (EN: PUT overwrites name/email, falling back to previous values when missing).
      *
-     * @param id - User cần cập nhật (EN: user to update).
-     * @param payload - Giá trị mới (EN: new values).
-     * @returns Promise<User> — Entity sau khi ghi (EN: entity after write).
-     * @sideEffects UPDATE trên PostgreSQL (EN: updates PostgreSQL row).
+     * @param id - User cáº§n cáº­p nháº­t (EN: user to update).
+     * @param payload - GiÃ¡ trá»‹ má»›i (EN: new values).
+     * @returns Promise<User> â€” Entity sau khi ghi (EN: entity after write).
+     * @sideEffects UPDATE trÃªn PostgreSQL (EN: updates PostgreSQL row).
      */
     async update(id: string, payload: Partial<User>): Promise<User> {
         const row = await this.usersRepo.findOne({
@@ -173,11 +177,11 @@ export class UserService {
     }
 
     /**
-     * PATCH: chỉ đổi field được gửi (EN: PATCH updates only provided fields).
+     * PATCH: chá»‰ Ä‘á»•i field Ä‘Æ°á»£c gá»­i (EN: PATCH updates only provided fields).
      *
-     * @param id - User cần patch (EN: user to patch).
+     * @param id - User cáº§n patch (EN: user to patch).
      * @param payload - Partial update (EN: partial update body).
-     * @returns Promise<User> — Entity sau patch (EN: entity after patch).
+     * @returns Promise<User> â€” Entity sau patch (EN: entity after patch).
      */
     async patch(id: string, payload: Partial<User>): Promise<User> {
         const row = await this.usersRepo.findOne({
@@ -199,11 +203,11 @@ export class UserService {
     }
 
     /**
-     * Xóa user — không tìm thấy thì lỗi rõ ràng (EN: delete user; missing id throws clearly).
+     * XÃ³a user â€” khÃ´ng tÃ¬m tháº¥y thÃ¬ lá»—i rÃµ rÃ ng (EN: delete user; missing id throws clearly).
      *
-     * @param id - User cần xóa (EN: user id to delete).
-     * @returns Promise<void> — Không body khi thành công ở HTTP layer (EN: void; HTTP 204 on success).
-     * @sideEffects DELETE trên PostgreSQL (EN: deletes PostgreSQL row).
+     * @param id - User cáº§n xÃ³a (EN: user id to delete).
+     * @returns Promise<void> â€” KhÃ´ng body khi thÃ nh cÃ´ng á»Ÿ HTTP layer (EN: void; HTTP 204 on success).
+     * @sideEffects DELETE trÃªn PostgreSQL (EN: deletes PostgreSQL row).
      */
     async remove(id: string): Promise<void> {
         const result = await this.usersRepo.delete({

@@ -1,3 +1,7 @@
+﻿/**
+ * AppModule — dang ky cac thanh phan cua feature App.
+ * (EN: AppModule — registers components for App feature.)
+ */
 import {
     Module 
 } from "@nestjs/common"
@@ -9,7 +13,7 @@ import {
 } from "./modules/user"
 
 /**
- * Root module — Config global + demo user module, không database (EN: root module with global config and in-memory demo; no database).
+ * Root module â€” Config global + demo user module, khÃ´ng database (EN: root module with global config and in-memory demo; no database).
  */
 @Module({
     imports: [

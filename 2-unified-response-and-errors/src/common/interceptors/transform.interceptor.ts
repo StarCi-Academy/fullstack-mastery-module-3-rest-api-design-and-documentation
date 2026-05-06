@@ -1,3 +1,7 @@
+﻿/**
+ * Interceptor — transform.interceptor.
+ * (EN: Interceptor — transform.interceptor.)
+ */
 import {
     CallHandler,
     ExecutionContext,
@@ -18,7 +22,7 @@ import {
 } from "../decorators"
 
 /**
- * Bọc mọi response thành công vào envelope `{ statusCode, message, data, timestamp }` (EN: wraps successful responses in a stable JSON envelope).
+ * Bá»c má»i response thÃ nh cÃ´ng vÃ o envelope `{ statusCode, message, data, timestamp }` (EN: wraps successful responses in a stable JSON envelope).
  */
 @Injectable()
 export class TransformInterceptor<T> implements NestInterceptor<T,
@@ -26,19 +30,19 @@ unknown> {
     constructor(private readonly reflector: Reflector) {}
 
     /**
-     * Đọc HTTP status + `@ResponseMessage()` rồi map body sang envelope (EN: reads HTTP status and `@ResponseMessage()` then maps body to envelope).
+     * Äá»c HTTP status + `@ResponseMessage()` rá»“i map body sang envelope (EN: reads HTTP status and `@ResponseMessage()` then maps body to envelope).
      *
-     * @param context - Ngữ cảnh thực thi Nest (handler/class) (EN: Nest execution context).
-     * @param next - Call chain tới controller (EN: downstream call handler).
+     * @param context - Ngá»¯ cáº£nh thá»±c thi Nest (handler/class) (EN: Nest execution context).
+     * @param next - Call chain tá»›i controller (EN: downstream call handler).
      * @returns Observable envelope JSON (EN: observable of envelope JSON).
      */
     intercept(
         context: ExecutionContext,
         next: CallHandler,
     ): Observable<unknown> {
-        // Lấy status HTTP đã được Nest gán (200/201/...) trước khi serialize (EN: HTTP status Nest assigned before serialization).
+        // Láº¥y status HTTP Ä‘Ã£ Ä‘Æ°á»£c Nest gÃ¡n (200/201/...) trÆ°á»›c khi serialize (EN: HTTP status Nest assigned before serialization).
         const statusCode = context.switchToHttp().getResponse().statusCode
-        // Ưu tiên message từ decorator, fallback "Success" (EN: prefer decorator message, else default "Success").
+        // Æ¯u tiÃªn message tá»« decorator, fallback "Success" (EN: prefer decorator message, else default "Success").
         const message =
             this.reflector.getAllAndOverride<string>(RESPONSE_MESSAGE,
                 [

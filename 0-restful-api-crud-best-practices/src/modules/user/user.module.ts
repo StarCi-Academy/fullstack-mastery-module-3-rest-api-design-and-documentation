@@ -1,3 +1,7 @@
+﻿/**
+ * UserModule — dang ky cac thanh phan cua feature User.
+ * (EN: UserModule — registers components for User feature.)
+ */
 import {
     Module 
 } from "@nestjs/common"
@@ -15,7 +19,7 @@ import {
 } from "./user.service"
 
 /**
- * Module user — đăng ký TypeORM feature + controller + service cho resource `/users` (EN: registers TypeORM feature, controller, and service for `/users`).
+ * Module user â€” Ä‘Äƒng kÃ½ TypeORM feature + controller + service cho resource `/users` (EN: registers TypeORM feature, controller, and service for `/users`).
  */
 @Module({
     imports: [TypeOrmModule.forFeature([UserEntity])],

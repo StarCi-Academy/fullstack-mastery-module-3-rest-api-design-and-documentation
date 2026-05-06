@@ -1,3 +1,7 @@
+﻿/**
+ * CatModule — dang ky cac thanh phan cua feature Cat.
+ * (EN: CatModule — registers components for Cat feature.)
+ */
 import {
     Module 
 } from "@nestjs/common"
@@ -9,7 +13,7 @@ import {
 } from "./cat.service"
 
 /**
- * Module cats — controller + service in-memory cho `/cats` (EN: cat module wiring in-memory demo).
+ * Module cats â€” controller + service in-memory cho `/cats` (EN: cat module wiring in-memory demo).
  */
 @Module({
     controllers: [CatController],

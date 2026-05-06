@@ -1,3 +1,7 @@
+﻿/**
+ * UserModule — dang ky cac thanh phan cua feature User.
+ * (EN: UserModule — registers components for User feature.)
+ */
 import {
     Module 
 } from "@nestjs/common"
@@ -9,7 +13,7 @@ import {
 } from "./user.service"
 
 /**
- * Module user — controller + service in-memory cho `/users` (EN: user module wiring in-memory demo for `/users`).
+ * Module user â€” controller + service in-memory cho `/users` (EN: user module wiring in-memory demo for `/users`).
  */
 @Module({
     controllers: [UsersController],

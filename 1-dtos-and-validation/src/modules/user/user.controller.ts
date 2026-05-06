@@ -1,3 +1,7 @@
+﻿/**
+ * Controller REST cho feature User.
+ * (EN: REST controller for User feature.)
+ */
 import {
     Body,
     Controller,
@@ -18,16 +22,16 @@ import {
 } from "./dto/create-user.dto"
 
 /**
- * HTTP adapter cho resource users — minh hoạ DTO + ValidationPipe bảo vệ endpoint (EN: HTTP adapter for users; demonstrates DTO + ValidationPipe protection).
+ * HTTP adapter cho resource users â€” minh hoáº¡ DTO + ValidationPipe báº£o vá»‡ endpoint (EN: HTTP adapter for users; demonstrates DTO + ValidationPipe protection).
  */
 @Controller("users")
 export class UserController {
     constructor(private readonly usersService: UserService) {}
 
     /**
-     * Trả danh sách user hiện có trong PostgreSQL (EN: return all users from PostgreSQL).
+     * Tráº£ danh sÃ¡ch user hiá»‡n cÃ³ trong PostgreSQL (EN: return all users from PostgreSQL).
      *
-     * @returns Promise<User[]> — Mảng user (có thể rỗng) (EN: user array, possibly empty).
+     * @returns Promise<User[]> â€” Máº£ng user (cÃ³ thá»ƒ rá»—ng) (EN: user array, possibly empty).
      */
     @Get()
     async findAll(): Promise<User[]> {
@@ -35,11 +39,11 @@ export class UserController {
     }
 
     /**
-     * Lấy một user theo id (EN: fetch one user by id).
+     * Láº¥y má»™t user theo id (EN: fetch one user by id).
      *
-     * @param id - Khóa định danh user (EN: user identifier).
-     * @returns Promise<User> — Bản ghi tìm thấy (EN: found record).
-     * @sideEffects Có thể ném NotFoundException nếu id không tồn tại (EN: may throw NotFoundException if missing).
+     * @param id - KhÃ³a Ä‘á»‹nh danh user (EN: user identifier).
+     * @returns Promise<User> â€” Báº£n ghi tÃ¬m tháº¥y (EN: found record).
+     * @sideEffects CÃ³ thá»ƒ nÃ©m NotFoundException náº¿u id khÃ´ng tá»“n táº¡i (EN: may throw NotFoundException if missing).
      */
     @Get(":id")
     async findOne(@Param("id") id: string): Promise<User> {
@@ -47,11 +51,11 @@ export class UserController {
     }
 
     /**
-     * Tạo user mới — body bắt buộc khớp CreateUserDto, nếu không ValidationPipe trả 400 (EN: create user; body must match CreateUserDto or ValidationPipe returns 400).
+     * Táº¡o user má»›i â€” body báº¯t buá»™c khá»›p CreateUserDto, náº¿u khÃ´ng ValidationPipe tráº£ 400 (EN: create user; body must match CreateUserDto or ValidationPipe returns 400).
      *
-     * @param createUserDto - DTO đã qua ValidationPipe (EN: validated DTO).
-     * @returns Promise<User> — Bản ghi vừa tạo (EN: newly created record).
-     * @sideEffects INSERT vào PostgreSQL (EN: inserts into PostgreSQL).
+     * @param createUserDto - DTO Ä‘Ã£ qua ValidationPipe (EN: validated DTO).
+     * @returns Promise<User> â€” Báº£n ghi vá»«a táº¡o (EN: newly created record).
+     * @sideEffects INSERT vÃ o PostgreSQL (EN: inserts into PostgreSQL).
      */
     @Post()
     @HttpCode(HttpStatus.CREATED)

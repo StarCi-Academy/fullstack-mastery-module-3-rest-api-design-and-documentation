@@ -1,3 +1,7 @@
+﻿/**
+ * Service xu ly logic nghiep vu cua User.
+ * (EN: Business logic service for User.)
+ */
 import {
     Injectable, NotFoundException 
 } from "@nestjs/common"
@@ -18,8 +22,8 @@ import type {
 } from "./dto/create-user.dto"
 
 /**
- * Service quản lý user trên PostgreSQL qua TypeORM — nghiệp vụ CRUD tách khỏi controller (EN: user persistence via TypeORM; CRUD logic stays out of controllers).
- * Dữ liệu nhận từ controller đã qua ValidationPipe, đảm bảo an toàn (EN: data from controller is already validated by ValidationPipe).
+ * Service quáº£n lÃ½ user trÃªn PostgreSQL qua TypeORM â€” nghiá»‡p vá»¥ CRUD tÃ¡ch khá»i controller (EN: user persistence via TypeORM; CRUD logic stays out of controllers).
+ * Dá»¯ liá»‡u nháº­n tá»« controller Ä‘Ã£ qua ValidationPipe, Ä‘áº£m báº£o an toÃ n (EN: data from controller is already validated by ValidationPipe).
  */
 @Injectable()
 export class UserService {
@@ -29,10 +33,10 @@ export class UserService {
     ) {}
 
     /**
-     * Map entity → DTO phẳng trả API (EN: map entity to flat API DTO).
+     * Map entity â†’ DTO pháº³ng tráº£ API (EN: map entity to flat API DTO).
      *
-     * @param row - Bản ghi ORM (EN: ORM row).
-     * @returns User — Payload JSON cho client (EN: JSON payload for clients).
+     * @param row - Báº£n ghi ORM (EN: ORM row).
+     * @returns User â€” Payload JSON cho client (EN: JSON payload for clients).
      */
     private toUser(row: UserEntity): User {
         return {
@@ -44,9 +48,9 @@ export class UserService {
     }
 
     /**
-     * Sinh id ngắn chưa tồn tại — retry giới hạn để tránh vòng lặp vô hạn (EN: generate short unused id with bounded retries).
+     * Sinh id ngáº¯n chÆ°a tá»“n táº¡i â€” retry giá»›i háº¡n Ä‘á»ƒ trÃ¡nh vÃ²ng láº·p vÃ´ háº¡n (EN: generate short unused id with bounded retries).
      *
-     * @returns Promise<string> — Id dùng cho `POST /users` (EN: id for new user create).
+     * @returns Promise<string> â€” Id dÃ¹ng cho `POST /users` (EN: id for new user create).
      */
     private async nextUniqueShortId(): Promise<string> {
         for (let attempt = 0; attempt < 32; attempt += 1) {
@@ -64,9 +68,9 @@ export class UserService {
     }
 
     /**
-     * Đọc toàn bộ user đang lưu (EN: read all stored users).
+     * Äá»c toÃ n bá»™ user Ä‘ang lÆ°u (EN: read all stored users).
      *
-     * @returns Promise<User[]> — Danh sách theo id tăng dần (EN: list ordered by id ascending).
+     * @returns Promise<User[]> â€” Danh sÃ¡ch theo id tÄƒng dáº§n (EN: list ordered by id ascending).
      */
     async findAll(): Promise<User[]> {
         const rows = await this.usersRepo.find({
@@ -78,11 +82,11 @@ export class UserService {
     }
 
     /**
-     * Tìm user theo id hoặc fail nhanh với 404 (EN: find by id or fail fast with 404 semantics).
+     * TÃ¬m user theo id hoáº·c fail nhanh vá»›i 404 (EN: find by id or fail fast with 404 semantics).
      *
-     * @param id - Khóa user (EN: user id).
-     * @returns Promise<User> — Bản ghi tìm thấy (EN: matched record).
-     * @sideEffects Ném NotFoundException khi không có bản ghi (EN: throws NotFoundException when missing).
+     * @param id - KhÃ³a user (EN: user id).
+     * @returns Promise<User> â€” Báº£n ghi tÃ¬m tháº¥y (EN: matched record).
+     * @sideEffects NÃ©m NotFoundException khi khÃ´ng cÃ³ báº£n ghi (EN: throws NotFoundException when missing).
      */
     async findOne(id: string): Promise<User> {
         const row = await this.usersRepo.findOne({
@@ -97,11 +101,11 @@ export class UserService {
     }
 
     /**
-     * Tạo user mới với id ngẫu nhiên ngắn — nhận CreateUserDto đã validate (EN: create user with short random id from validated DTO).
+     * Táº¡o user má»›i vá»›i id ngáº«u nhiÃªn ngáº¯n â€” nháº­n CreateUserDto Ä‘Ã£ validate (EN: create user with short random id from validated DTO).
      *
-     * @param dto - DTO đã qua ValidationPipe (EN: validated DTO).
-     * @returns Promise<User> — Bản ghi mới đã persist (EN: newly persisted record).
-     * @sideEffects INSERT vào PostgreSQL (EN: inserts into PostgreSQL).
+     * @param dto - DTO Ä‘Ã£ qua ValidationPipe (EN: validated DTO).
+     * @returns Promise<User> â€” Báº£n ghi má»›i Ä‘Ã£ persist (EN: newly persisted record).
+     * @sideEffects INSERT vÃ o PostgreSQL (EN: inserts into PostgreSQL).
      */
     async create(dto: CreateUserDto): Promise<User> {
         const id = await this.nextUniqueShortId()

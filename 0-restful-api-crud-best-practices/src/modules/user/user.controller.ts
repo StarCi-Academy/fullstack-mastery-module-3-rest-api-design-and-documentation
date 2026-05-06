@@ -1,3 +1,7 @@
+﻿/**
+ * Controller REST cho feature User.
+ * (EN: REST controller for User feature.)
+ */
 import {
     Body,
     Controller,
@@ -18,16 +22,16 @@ import {
 } from "./user.service"
 
 /**
- * HTTP adapter cho resource users — không chứa nghiệp vụ, chỉ ủy quyền cho service (EN: HTTP adapter; delegates to service only).
+ * HTTP adapter cho resource users â€” khÃ´ng chá»©a nghiá»‡p vá»¥, chá»‰ á»§y quyá»n cho service (EN: HTTP adapter; delegates to service only).
  */
 @Controller("users")
 export class UserController {
     constructor(private readonly usersService: UserService) {}
 
     /**
-     * Demo: xóa hết bản ghi `users` (dọn seed / reset bài lab) (EN: demo wipe-all for lesson reset).
+     * Demo: xÃ³a háº¿t báº£n ghi `users` (dá»n seed / reset bÃ i lab) (EN: demo wipe-all for lesson reset).
      *
-     * @returns Promise<void> — **HTTP 204** không body (EN: **HTTP 204** no body).
+     * @returns Promise<void> â€” **HTTP 204** khÃ´ng body (EN: **HTTP 204** no body).
      */
     @Delete("demo/clear-all")
     @HttpCode(HttpStatus.NO_CONTENT)
@@ -36,9 +40,9 @@ export class UserController {
     }
 
     /**
-     * Demo: tạo một user bằng **@faker-js/faker** (`faker.seed(1337)`) (EN: demo insert one faker-backed user).
+     * Demo: táº¡o má»™t user báº±ng **@faker-js/faker** (`faker.seed(1337)`) (EN: demo insert one faker-backed user).
      *
-     * @returns Promise<User> — **HTTP 201** + JSON user (EN: **HTTP 201** + user JSON).
+     * @returns Promise<User> â€” **HTTP 201** + JSON user (EN: **HTTP 201** + user JSON).
      */
     @Post("demo/seed-one")
     @HttpCode(HttpStatus.CREATED)
@@ -47,9 +51,9 @@ export class UserController {
     }
 
     /**
-     * Trả danh sách user hiện có trong PostgreSQL (EN: return all users from PostgreSQL).
+     * Tráº£ danh sÃ¡ch user hiá»‡n cÃ³ trong PostgreSQL (EN: return all users from PostgreSQL).
      *
-     * @returns Promise<User[]> — Mảng user (có thể rỗng) (EN: user array, possibly empty).
+     * @returns Promise<User[]> â€” Máº£ng user (cÃ³ thá»ƒ rá»—ng) (EN: user array, possibly empty).
      */
     @Get()
     async findAll(): Promise<User[]> {
@@ -57,11 +61,11 @@ export class UserController {
     }
 
     /**
-     * Lấy một user theo id (EN: fetch one user by id).
+     * Láº¥y má»™t user theo id (EN: fetch one user by id).
      *
-     * @param id - Khóa định danh user (EN: user identifier).
-     * @returns Promise<User> — Bản ghi tìm thấy (EN: found record).
-     * @sideEffects Có thể ném NotFoundException nếu id không tồn tại (EN: may throw NotFoundException if missing).
+     * @param id - KhÃ³a Ä‘á»‹nh danh user (EN: user identifier).
+     * @returns Promise<User> â€” Báº£n ghi tÃ¬m tháº¥y (EN: found record).
+     * @sideEffects CÃ³ thá»ƒ nÃ©m NotFoundException náº¿u id khÃ´ng tá»“n táº¡i (EN: may throw NotFoundException if missing).
      */
     @Get(":id")
     async findOne(@Param("id") id: string): Promise<User> {
@@ -69,11 +73,11 @@ export class UserController {
     }
 
     /**
-     * Tạo user mới từ payload (EN: create a new user from body).
+     * Táº¡o user má»›i tá»« payload (EN: create a new user from body).
      *
-     * @param payload - name/email tùy chọn (EN: optional name/email).
-     * @returns Promise<User> — Bản ghi vừa tạo (EN: newly created record).
-     * @sideEffects INSERT vào PostgreSQL (EN: inserts into PostgreSQL).
+     * @param payload - name/email tÃ¹y chá»n (EN: optional name/email).
+     * @returns Promise<User> â€” Báº£n ghi vá»«a táº¡o (EN: newly created record).
+     * @sideEffects INSERT vÃ o PostgreSQL (EN: inserts into PostgreSQL).
      */
     @Post()
     @HttpCode(HttpStatus.CREATED)
@@ -82,11 +86,11 @@ export class UserController {
     }
 
     /**
-     * Thay thế toàn bộ field name/email theo payload (PUT semantics) (EN: full replace of name/email per PUT semantics).
+     * Thay tháº¿ toÃ n bá»™ field name/email theo payload (PUT semantics) (EN: full replace of name/email per PUT semantics).
      *
-     * @param id - ID user cần cập nhật (EN: user id to update).
-     * @param payload - Giá trị thay thế (EN: replacement values).
-     * @returns Promise<User> — Bản ghi sau cập nhật (EN: updated record).
+     * @param id - ID user cáº§n cáº­p nháº­t (EN: user id to update).
+     * @param payload - GiÃ¡ trá»‹ thay tháº¿ (EN: replacement values).
+     * @returns Promise<User> â€” Báº£n ghi sau cáº­p nháº­t (EN: updated record).
      */
     @Put(":id")
     async update(
@@ -98,11 +102,11 @@ export class UserController {
     }
 
     /**
-     * Cập nhật một phần field được gửi lên (PATCH semantics) (EN: partial update for provided fields only).
+     * Cáº­p nháº­t má»™t pháº§n field Ä‘Æ°á»£c gá»­i lÃªn (PATCH semantics) (EN: partial update for provided fields only).
      *
      * @param id - ID user (EN: user id).
-     * @param payload - Chỉ field được gửi mới đổi (EN: only sent fields change).
-     * @returns Promise<User> — Bản ghi sau patch (EN: record after patch).
+     * @param payload - Chá»‰ field Ä‘Æ°á»£c gá»­i má»›i Ä‘á»•i (EN: only sent fields change).
+     * @returns Promise<User> â€” Báº£n ghi sau patch (EN: record after patch).
      */
     @Patch(":id")
     async patch(
@@ -114,11 +118,11 @@ export class UserController {
     }
 
     /**
-     * Xóa user theo id (EN: delete user by id).
+     * XÃ³a user theo id (EN: delete user by id).
      *
-     * @param id - ID user cần xóa (EN: user id to delete).
-     * @returns Promise<void> — Không body khi thành công (HTTP 204) (EN: no body on success (HTTP 204)).
-     * @sideEffects DELETE trên PostgreSQL (EN: deletes PostgreSQL row).
+     * @param id - ID user cáº§n xÃ³a (EN: user id to delete).
+     * @returns Promise<void> â€” KhÃ´ng body khi thÃ nh cÃ´ng (HTTP 204) (EN: no body on success (HTTP 204)).
+     * @sideEffects DELETE trÃªn PostgreSQL (EN: deletes PostgreSQL row).
      */
     @Delete(":id")
     @HttpCode(HttpStatus.NO_CONTENT)

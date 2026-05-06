@@ -1,0 +1,35 @@
+# Stack hạ tầng bài 1-dtos-and-validation — chỉ infra, backend chạy local (nest start).
+# (EN: Infrastructure stack for 1-dtos-and-validation — infra only, backend runs locally.)
+#
+# Thư mục: cd fullstack-mastery-module-3-rest-api-development-documentation/1-dtos-and-validation/.docker
+# (EN: Working dir: cd fullstack-mastery-module-3-rest-api-development-documentation/1-dtos-and-validation/.docker)
+#
+# Khởi chạy: docker compose up -d
+# (EN: Start: docker compose up -d)
+#
+# Dừng & xóa: docker compose down -v
+# (EN: Stop & clean: docker compose down -v)
+name: 1-dtos-and-validation
+
+services:
+  # PostgreSQL — persistence cho bài học (TypeORM).
+  # (EN: PostgreSQL — persistence for the lesson (TypeORM).)
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: dto_validation_demo
+    ports:
+      # Ánh xạ cổng host 5432 → container 5432 (PostgreSQL).
+      # (EN: Map host port 5432 → container 5432 (PostgreSQL).)
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+volumes:
+  pg_data:
+
+networks:
+  1-dtos-and-validation:
+    name: 1-dtos-and-validation

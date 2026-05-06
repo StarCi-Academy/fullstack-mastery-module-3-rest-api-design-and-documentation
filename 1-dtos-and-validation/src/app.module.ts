@@ -1,3 +1,7 @@
+﻿/**
+ * AppModule — dang ky cac thanh phan cua feature App.
+ * (EN: AppModule — registers components for App feature.)
+ */
 import {
     Module 
 } from "@nestjs/common"
@@ -12,7 +16,7 @@ import {
 } from "./modules/user"
 
 /**
- * Root module — Config + TypeORM + ValidationPipe demo modules cho bài DTOs & Validation + PostgreSQL (EN: root module wiring config, TypeORM, and demo domains).
+ * Root module â€” Config + TypeORM + ValidationPipe demo modules cho bÃ i DTOs & Validation + PostgreSQL (EN: root module wiring config, TypeORM, and demo domains).
  */
 @Module({
     imports: [
