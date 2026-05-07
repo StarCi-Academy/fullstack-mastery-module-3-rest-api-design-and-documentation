@@ -1,4 +1,4 @@
-﻿/**
+/**
  * AppModule — dang ky cac thanh phan cua feature App.
  * (EN: AppModule — registers components for App feature.)
  */
@@ -10,10 +10,10 @@ import {
 } from "@nestjs/config"
 import {
     CatModule 
-} from "./modules/cat"
+} from "./modules"
 
 /**
- * Root module â€” Config global + demo cats + khÃ´ng database (EN: root module with global config and in-memory cats; no database).
+ * Root module — Config global + demo cats + không database (EN: root module with global config and in-memory cats; no database).
  */
 @Module({
     imports: [

@@ -21,10 +21,8 @@ import {
 } from "./app.module"
 import {
     AllExceptionsFilter,
-} from "./common/filters"
-import {
     TransformInterceptor,
-} from "./common/interceptors"
+} from "./common"
 
 export async function bootstrap(): Promise<void> {
     const app = await NestFactory.create(AppModule)
@@ -47,17 +45,23 @@ export async function bootstrap(): Promise<void> {
         .addBearerAuth()
         .build()
 
-    const document = SwaggerModule.createDocument(app, openApiConfig)
+    const document = SwaggerModule.createDocument(app,
+        openApiConfig)
 
     app.use(
         "/scalar",
-        apiReference({ content: document }),
+        apiReference({
+            content: document 
+        }),
     )
 
-    SwaggerModule.setup("swagger", app, document)
+    SwaggerModule.setup("swagger",
+        app,
+        document)
 
     // Cổng: biến môi trường PORT hoặc 3000.
     // (EN: Port from env PORT or default 3000.)
     const port = Number(process.env.PORT) || 3000
-    await app.listen(port, "0.0.0.0")
+    await app.listen(port,
+        "0.0.0.0")
 }

@@ -10,7 +10,7 @@ import {
 } from "./dto/create-cat.dto"
 
 /**
- * Báº£n ghi mÃ¨o demo trong memory (khá»›p response `GET /cats` trong giÃ¡o trÃ¬nh) (EN: in-memory cat record matching lesson `GET /cats` sample).
+ * Bản ghi mèo demo trong memory (khớp response `GET /cats` trong giáo trình) (EN: in-memory cat record matching lesson `GET /cats` sample).
  */
 export interface CatRecord {
     name: string
@@ -18,7 +18,7 @@ export interface CatRecord {
 }
 
 /**
- * Nghiá»‡p vá»¥ cats demo â€” danh sÃ¡ch, táº¡o má»›i, route lá»—i giáº£ láº­p (EN: demo cat business logic).
+ * Nghiệp vụ cats demo — danh sách, tạo mới, route lỗi giả lập (EN: demo cat business logic).
  */
 @Injectable()
 export class CatService {
@@ -30,20 +30,20 @@ export class CatService {
     ]
 
     /**
-     * Tráº£ danh sÃ¡ch mÃ¨o hiá»‡n cÃ³ (EN: returns all demo cats).
+     * Trả danh sách mèo hiện có (EN: returns all demo cats).
      *
-     * @returns Máº£ng `CatRecord` (EN: array of cat records).
+     * @returns Mảng `CatRecord` (EN: array of cat records).
      */
     findAll(): CatRecord[] {
         return this.cats
     }
 
     /**
-     * ThÃªm mÃ¨o tá»« DTO â€” map `breed` â†’ `name` trong model demo (EN: appends a cat; maps DTO `breed` to stored `name` for this simple demo).
+     * Thêm mèo từ DTO — map `breed` → `name` trong model demo (EN: appends a cat; maps DTO `breed` to stored `name` for this simple demo).
      *
-     * @param dto - Payload Ä‘Ã£ validate (EN: validated payload).
-     * @returns Báº£n ghi vá»«a táº¡o (EN: newly created record).
-     * @sideEffects Push vÃ o máº£ng `cats` (EN: pushes into `cats`).
+     * @param dto - Payload đã validate (EN: validated payload).
+     * @returns Bản ghi vừa tạo (EN: newly created record).
+     * @sideEffects Push vào mảng `cats` (EN: pushes into `cats`).
      */
     create(dto: CreateCatDto): CatRecord {
         const cat: CatRecord = {
@@ -55,14 +55,14 @@ export class CatService {
     }
 
     /**
-     * NÃ©m `BadRequestException` cá»‘ Ä‘á»‹nh Ä‘á»ƒ demo error envelope + docs (EN: throws a fixed `BadRequestException` for error contract demo).
+     * Ném `BadRequestException` cố định Ä‘á»ƒ demo error envelope + docs (EN: throws a fixed `BadRequestException` for error contract demo).
      *
-     * @returns KhÃ´ng bao giá» resolve (EN: never returns).
-     * @sideEffects NÃ©m exception (EN: always throws).
+     * @returns Không bao giá» resolve (EN: never returns).
+     * @sideEffects Ném exception (EN: always throws).
      */
     triggerDemoError(): never {
         throw new BadRequestException(
-            "ÄÃ¢y lÃ  lá»—i giáº£ láº­p Ä‘á»ƒ test Unified Error Response",
+            "ÄÃ¢y là lỗi giả lập Ä‘á»ƒ test Unified Error Response",
         )
     }
 }

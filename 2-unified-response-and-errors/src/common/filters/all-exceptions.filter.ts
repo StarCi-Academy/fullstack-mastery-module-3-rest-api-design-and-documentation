@@ -14,15 +14,15 @@ import type {
 } from "express"
 
 /**
- * Báº¯t má»i exception vÃ  tráº£ JSON lá»—i thá»‘ng nháº¥t, khÃ´ng lá»™ stack trace (EN: catches all exceptions and returns a unified JSON error without stack traces).
+ * Bắt má»i exception và trả JSON lỗi thống nhất, không lá»™ stack trace (EN: catches all exceptions and returns a unified JSON error without stack traces).
  */
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
     /**
-     * Chuáº©n hoÃ¡ exception thÃ nh `{ statusCode, error, message, timestamp, path }` (EN: normalizes any exception to the unified error contract).
+     * Chuẩn hoá exception thành `{ statusCode, error, message, timestamp, path }` (EN: normalizes any exception to the unified error contract).
      *
-     * @param exception - Lá»—i báº¥t ká»³ (HttpException hoáº·c unknown) (EN: any thrown value).
-     * @param host - Arguments host Ä‘á»ƒ láº¥y HTTP req/res (EN: host for HTTP req/res).
+     * @param exception - Lỗi bất kỳ (HttpException hoặc unknown) (EN: any thrown value).
+     * @param host - Arguments host Ä‘á»ƒ lấy HTTP req/res (EN: host for HTTP req/res).
      * @sideEffects Ghi HTTP status + JSON body ra response (EN: writes HTTP status and JSON body).
      */
     catch(exception: unknown, host: ArgumentsHost): void {
@@ -52,10 +52,10 @@ export class AllExceptionsFilter implements ExceptionFilter {
     }
 
     /**
-     * TrÃ­ch message an toÃ n tá»« HttpException.getResponse() hoáº·c Error (EN: safely extracts message from Nest HttpException payloads).
+     * Trích message an toàn từ HttpException.getResponse() hoặc Error (EN: safely extracts message from Nest HttpException payloads).
      *
-     * @param exception - GiÃ¡ trá»‹ Ä‘Æ°á»£c nÃ©m (EN: thrown value).
-     * @returns Chuá»—i message cho client (EN: client-facing message string).
+     * @param exception - Giá trị được ném (EN: thrown value).
+     * @returns Chuỗi message cho client (EN: client-facing message string).
      */
     private resolveMessage(exception: unknown): string {
         if (exception instanceof HttpException) {

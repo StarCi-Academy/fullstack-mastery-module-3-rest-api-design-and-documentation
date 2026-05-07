@@ -7,7 +7,7 @@ import {
 } from "@nestjs/common"
 
 /**
- * User demo lÆ°u trong memory (khÃ´ng DB) â€” Ä‘á»§ cho bÃ i envelope (EN: in-memory demo users for envelope lesson).
+ * User demo lưu trong memory (không DB) — đủ cho bài envelope (EN: in-memory demo users for envelope lesson).
  */
 export interface DemoUser {
     id: number
@@ -15,7 +15,7 @@ export interface DemoUser {
 }
 
 /**
- * Nghiá»‡p vá»¥ users demo: danh sÃ¡ch + táº¡o má»›i (EN: demo user business logic: list + create).
+ * Nghiệp vụ users demo: danh sách + tạo mới (EN: demo user business logic: list + create).
  */
 @Injectable()
 export class UsersService {
@@ -29,20 +29,20 @@ export class UsersService {
     private nextId = 2
 
     /**
-     * Tráº£ toÃ n bá»™ user Ä‘ang lÆ°u trong memory (EN: returns all in-memory users).
+     * Trả toàn bá»™ user đang lưu trong memory (EN: returns all in-memory users).
      *
-     * @returns Máº£ng `DemoUser` (EN: array of demo users).
+     * @returns Mảng `DemoUser` (EN: array of demo users).
      */
     findAll(): DemoUser[] {
         return this.users
     }
 
     /**
-     * Táº¡o user má»›i vá»›i id tÄƒng dáº§n (EN: creates a user with monotonic id).
+     * Tạo user mới với id tÄƒng dần (EN: creates a user with monotonic id).
      *
-     * @param name - TÃªn hiá»ƒn thá»‹ (EN: display name).
-     * @returns Báº£n ghi vá»«a táº¡o `{ id, name }` (EN: newly created `{ id, name }` record).
-     * @sideEffects ThÃªm pháº§n tá»­ vÃ o máº£ng `users` (EN: pushes into the `users` array).
+     * @param name - Tên hiá»ƒn thị (EN: display name).
+     * @returns Bản ghi vừa tạo `{ id, name }` (EN: newly created `{ id, name }` record).
+     * @sideEffects Thêm phần tử vào mảng `users` (EN: pushes into the `users` array).
      */
     create(name: string): { id: number; name: string } {
         const user: DemoUser = {

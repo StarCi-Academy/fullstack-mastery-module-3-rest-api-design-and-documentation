@@ -29,7 +29,7 @@ import {
 } from "./dto/create-cat.dto"
 
 /**
- * HTTP `/cats` + decorator **OpenAPI** â€” khá»›p vÃ­ dá»¥ giÃ¡o trÃ¬nh (EN: `/cats` HTTP surface with OpenAPI decorators per lesson).
+ * HTTP `/cats` + decorator **OpenAPI** — khớp ví dụ giáo trình (EN: `/cats` HTTP surface with OpenAPI decorators per lesson).
  */
 @ApiTags("Cats Module")
 @Controller("cats")
@@ -37,9 +37,9 @@ export class CatController {
     constructor(private readonly catService: CatService) {}
 
     /**
-     * `GET /cats` â€” envelope success + docs (EN: success envelope + Swagger operation metadata).
+     * `GET /cats` — envelope success + docs (EN: success envelope + Swagger operation metadata).
      *
-     * @returns Danh sÃ¡ch mÃ¨o (EN: list of cats).
+     * @returns Danh sách mèo (EN: list of cats).
      */
     @Get()
     @ApiOperation({
@@ -49,16 +49,16 @@ export class CatController {
         status: 200,
         description: "List of cats returned",
     })
-    @ResponseMessage("Láº¥y danh sÃ¡ch mÃ¨o thÃ nh cÃ´ng (EN: Get all cats success)")
+    @ResponseMessage("Lấy danh sách mèo thành công (EN: Get all cats success)")
     findAll(): CatRecord[] {
         return this.catService.findAll()
     }
 
     /**
-     * `POST /cats` â€” táº¡o mÃ¨o tá»« DTO (EN: creates a cat from validated DTO).
+     * `POST /cats` — tạo mèo từ DTO (EN: creates a cat from validated DTO).
      *
      * @param dto - Body JSON theo `CreateCatDto` (EN: request body matching `CreateCatDto`).
-     * @returns Báº£n ghi má»›i (EN: newly created record).
+     * @returns Bản ghi mới (EN: newly created record).
      */
     @Post()
     @HttpCode(HttpStatus.CREATED)
@@ -78,9 +78,9 @@ export class CatController {
     }
 
     /**
-     * `GET /cats/error-demo` â€” luá»“ng lá»—i cá»‘ Ä‘á»‹nh cho **AllExceptionsFilter** (EN: fixed error path for unified error envelope).
+     * `GET /cats/error-demo` — luồng lỗi cố định cho **AllExceptionsFilter** (EN: fixed error path for unified error envelope).
      *
-     * @returns KhÃ´ng (luÃ´n nÃ©m exception) (EN: never returns successfully).
+     * @returns Không (luôn ném exception) (EN: never returns successfully).
      */
     @Get("error-demo")
     @ApiOperation({

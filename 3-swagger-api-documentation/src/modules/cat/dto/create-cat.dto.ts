@@ -13,7 +13,7 @@ import {
 } from "class-validator"
 
 /**
- * DTO táº¡o mÃ¨o â€” **Swagger** cáº§n `@ApiProperty` vÃ¬ type TS bá»‹ erase khi build (EN: create-cat DTO; Swagger needs runtime metadata from `@ApiProperty`).
+ * DTO tạo mèo — **Swagger** cần `@ApiProperty` vì type TS bị erase khi build (EN: create-cat DTO; Swagger needs runtime metadata from `@ApiProperty`).
  */
 export class CreateCatDto {
     @ApiProperty({
@@ -21,7 +21,7 @@ export class CreateCatDto {
         description: "Breed of the cat",
     })
     @IsString()
-    breed!: string
+        breed!: string
 
     @ApiProperty({
         example: 2,
@@ -29,5 +29,5 @@ export class CreateCatDto {
     })
     @Type(() => Number)
     @IsNumber()
-    age!: number
+        age!: number
 }

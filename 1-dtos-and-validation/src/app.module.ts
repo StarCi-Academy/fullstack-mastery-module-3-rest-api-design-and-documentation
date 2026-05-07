@@ -1,50 +1,47 @@
-﻿/**
+/**
  * AppModule — dang ky cac thanh phan cua feature App.
  * (EN: AppModule — registers components for App feature.)
  */
 import {
-    Module 
+    Module
 } from "@nestjs/common"
 import {
-    ConfigModule, ConfigService 
+    ConfigModule
 } from "@nestjs/config"
 import {
-    TypeOrmModule 
+    TypeOrmModule
 } from "@nestjs/typeorm"
 import {
-    UserEntity, UserModule 
-} from "./modules/user"
+    databaseConfig, DatabaseConfig
+} from "./config"
+import {
+    UserEntity,
+    UserModule
+} from "./modules"
 
 /**
- * Root module â€” Config + TypeORM + ValidationPipe demo modules cho bÃ i DTOs & Validation + PostgreSQL (EN: root module wiring config, TypeORM, and demo domains).
+ * Root module — Config + TypeORM + ValidationPipe demo modules cho bài DTOs & Validation + PostgreSQL (EN: root module wiring config, TypeORM, and demo domains).
  */
 @Module({
     imports: [
         ConfigModule.forRoot({
             isGlobal: true,
-            envFilePath: [".env"],
+            load: [databaseConfig],
         }),
         TypeOrmModule.forRootAsync({
-            imports: [ConfigModule],
-            inject: [ConfigService],
-            useFactory: (config: ConfigService) => ({
+            inject: [databaseConfig.KEY],
+            useFactory: (dbConfig: DatabaseConfig) => ({
                 type: "postgres",
-                host: config.get<string>("DATABASE_HOST",
-                    "localhost"),
-                port: config.get<number>("DATABASE_PORT",
-                    5432),
-                username: config.get<string>("DATABASE_USERNAME",
-                    "postgres"),
-                password: config.get<string>("DATABASE_PASSWORD",
-                    "postgres"),
-                database: config.get<string>("DATABASE_NAME",
-                    "dto_validation_demo"),
+                host: dbConfig.postgres.host,
+                port: dbConfig.postgres.port,
+                username: dbConfig.postgres.username,
+                password: dbConfig.postgres.password,
+                database: dbConfig.postgres.database,
                 entities: [UserEntity],
-                synchronize: config.get<string>("TYPEORM_SYNC",
-                    "true") === "true",
+                synchronize: true,
             }),
         }),
         UserModule,
     ],
 })
-export class AppModule {}
+export class AppModule { }

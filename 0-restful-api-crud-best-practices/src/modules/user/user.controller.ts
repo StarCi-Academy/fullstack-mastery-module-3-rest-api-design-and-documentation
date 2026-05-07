@@ -15,10 +15,10 @@ import {
     Put,
 } from "@nestjs/common"
 import type {
-    User 
-} from "./interfaces/user.interface"
+    User
+} from "./interfaces"
 import {
-    UserService 
+    UserService
 } from "./user.service"
 
 /**
@@ -26,7 +26,7 @@ import {
  */
 @Controller("users")
 export class UserController {
-    constructor(private readonly usersService: UserService) {}
+    constructor(private readonly usersService: UserService) { }
 
     /**
      * Demo: xóa hết bản ghi `users` (dá»n seed / reset bài lab) (EN: demo wipe-all for lesson reset).

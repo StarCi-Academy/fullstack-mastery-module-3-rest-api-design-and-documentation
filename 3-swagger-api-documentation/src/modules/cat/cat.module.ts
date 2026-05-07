@@ -13,7 +13,7 @@ import {
 } from "./cat.service"
 
 /**
- * Module cats â€” controller + service in-memory cho `/cats` (EN: cat module wiring in-memory demo).
+ * Module cats — controller + service in-memory cho `/cats` (EN: cat module wiring in-memory demo).
  */
 @Module({
     controllers: [CatController],

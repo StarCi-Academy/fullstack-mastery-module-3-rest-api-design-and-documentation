@@ -22,37 +22,37 @@ import type {
 } from "./user.service"
 
 /**
- * HTTP adapter `/users` â€” minh hoáº¡ success envelope + `BadRequestException` bá»c bá»Ÿi filter (EN: HTTP adapter demonstrating success envelope and filtered validation errors).
+ * HTTP adapter `/users` — minh hoạ success envelope + `BadRequestException` bá»c bởi filter (EN: HTTP adapter demonstrating success envelope and filtered validation errors).
  */
 @Controller("users")
 export class UsersController {
     constructor(private readonly usersService: UsersService) {}
 
     /**
-     * `GET /users` â€” envelope success + message tuá»³ chá»‰nh (EN: success envelope with custom `@ResponseMessage`).
+     * `GET /users` — envelope success + message tuỳ chỉnh (EN: success envelope with custom `@ResponseMessage`).
      *
-     * @returns Danh sÃ¡ch user demo (EN: demo user list).
+     * @returns Danh sách user demo (EN: demo user list).
      */
     @Get()
-    @ResponseMessage("Láº¥y danh sÃ¡ch thÃ nh cÃ´ng (EN: Get all success)")
+    @ResponseMessage("Lấy danh sách thành công (EN: Get all success)")
     findAll(): DemoUser[] {
         return this.usersService.findAll()
     }
 
     /**
-     * `POST /users` â€” thiáº¿u `name` â†’ 400; Ä‘á»§ `name` â†’ 201 + envelope (EN: missing `name` yields 400; valid body yields 201 + envelope).
+     * `POST /users` — thiếu `name` → 400; đủ `name` → 201 + envelope (EN: missing `name` yields 400; valid body yields 201 + envelope).
      *
-     * @param body - Payload JSON cÃ³ thá»ƒ cÃ³ `name` (EN: JSON body optionally containing `name`).
-     * @returns User vá»«a táº¡o (EN: newly created user payload).
-     * @sideEffects CÃ³ thá»ƒ nÃ©m `BadRequestException` (EN: may throw `BadRequestException`).
+     * @param body - Payload JSON có thá»ƒ có `name` (EN: JSON body optionally containing `name`).
+     * @returns User vừa tạo (EN: newly created user payload).
+     * @sideEffects Có thá»ƒ ném `BadRequestException` (EN: may throw `BadRequestException`).
      */
     @Post()
     @HttpCode(HttpStatus.CREATED)
-    @ResponseMessage("Táº¡o má»›i thÃ nh cÃ´ng (EN: Create success)")
+    @ResponseMessage("Tạo mới thành công (EN: Create success)")
     create(@Body() body: { name?: string }): { id: number; name: string } {
         if (!body?.name?.trim()) {
             throw new BadRequestException(
-                "TÃªn khÃ´ng Ä‘Æ°á»£c Ä‘á»ƒ trá»‘ng (EN: Name is required)",
+                "Tên không được Ä‘á»ƒ trống (EN: Name is required)",
             )
         }
         return this.usersService.create(body.name.trim())
