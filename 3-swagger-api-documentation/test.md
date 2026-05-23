@@ -42,13 +42,25 @@ Expected HTTP 200, content-type `application/json`. The document must contain:
 - `components.schemas.CreateCatDto` (generated from `@ApiProperty`).
 - `components.securitySchemes.bearer` (from `.addBearerAuth()`).
 
-## Flow 4 -- Tagged routes + bearer auth in Swagger UI
+## Flow 4 -- Tagged routes grouping in Swagger UI
 
-Visual checks on `http://localhost:3000/swagger`:
+Visual check on `http://localhost:3000/swagger`:
 
-- Two tag groups: **Cats Module** and **Dogs Module**.
-- A lock icon appears on **POST `/cats`** (because of `@ApiBearerAuth()`); none on `GET /cats` or `GET /dogs`.
-- Clicking **Authorize** opens the bearer token dialog. After entering any token, locked routes send `Authorization: Bearer <token>` on Execute.
+- Sidebar shows two tag sections: **Cats Module** and **Dogs Module**.
+- Expanding Cats Module lists `POST /cats`, `GET /cats`, `GET /cats/error-demo`.
+- Expanding Dogs Module lists `GET /dogs`.
+
+Pass criteria: tag sections are distinct, each route appears under the tag declared by its controller's `@ApiTags()`.
+
+## Flow 5 -- Bearer auth lock icon + Authorize dialog
+
+Visual check on `http://localhost:3000/swagger`:
+
+- **POST `/cats`** displays a lock icon next to its summary; **GET `/cats`** and **GET `/dogs`** do NOT.
+- Clicking the top-right **Authorize** button opens "Available authorizations" with the `bearer` scheme listed.
+- Paste any token (e.g. `test-token`), click Authorize, then run **POST /cats** via "Try it out" -- the curl preview now contains `-H "Authorization: Bearer test-token"`.
+
+Pass criteria: lock icon visible only on the route decorated with `@ApiBearerAuth()`; Authorize dialog opens and injects the header on subsequent Execute calls.
 
 ## Notes
 

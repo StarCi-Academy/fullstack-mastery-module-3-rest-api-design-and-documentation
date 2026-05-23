@@ -4,7 +4,7 @@
 
 ## Expected & Actual Matches
 
-**Luồng 1 -- Seed và đọc danh sách (`POST /users/demo/seed-one`)**
+**Luồng 1 -- Seed user khởi tạo (`POST /users/demo/seed-one`)**
 Tạo dữ liệu mẫu trả về 201:
 ```json
 {
@@ -13,8 +13,10 @@ Tạo dữ liệu mẫu trả về 201:
   "email": "Chelsea_Wolf@hotmail.com"
 }
 ```
+Pass criteria: status 201, body chứa `id`, `name`, `email` của user vừa seed.
 
-Lấy danh sách `GET /users` trả về 200:
+**Luồng 2 -- Read list (`GET /users`)**
+Lấy danh sách trả về 200:
 ```json
 [
   {
@@ -24,8 +26,9 @@ Lấy danh sách `GET /users` trả về 200:
   }
 ]
 ```
+Pass criteria: status 200, body là array không rỗng, chứa user vừa seed ở Luồng 1.
 
-**Luồng 2 -- Create new user (`POST /users`)**
+**Luồng 3 -- Create new user (`POST /users`)**
 Trả về 201:
 ```json
 {
@@ -35,7 +38,7 @@ Trả về 201:
 }
 ```
 
-**Luồng 3 -- Full update (`PUT /users/:id`)**
+**Luồng 4 -- Full update (`PUT /users/:id`)**
 Trả về 200:
 ```json
 {
@@ -45,7 +48,7 @@ Trả về 200:
 }
 ```
 
-**Luồng 4 -- Partial update (`PATCH /users/:id`)**
+**Luồng 5 -- Partial update (`PATCH /users/:id`)**
 Trả về 200:
 ```json
 {
@@ -55,7 +58,7 @@ Trả về 200:
 }
 ```
 
-**Luồng 5 -- Delete (`DELETE /users/:id`)**
+**Luồng 6 -- Delete (`DELETE /users/:id`)**
 Trả về 204 (No Content)
 
 **Các thay đổi đã thực hiện:**
