@@ -38,10 +38,14 @@ export async function bootstrap(): Promise<void> {
     app.useGlobalInterceptors(new TransformInterceptor(reflector))
     app.useGlobalFilters(new AllExceptionsFilter())
 
+    // DocumentBuilder cấu hình metadata + nhóm tag + bearer auth scheme
+    // (EN: DocumentBuilder configures metadata, route grouping tags, and the bearer auth scheme).
     const openApiConfig = new DocumentBuilder()
         .setTitle("StarCi Academy Backend")
-        .setDescription("API documentation")
+        .setDescription("API documentation for the REST API Design & Documentation lesson")
         .setVersion("1.0")
+        .addTag("Cats Module", "Mèo demo (EN: demo cats)")
+        .addTag("Dogs Module", "Chó demo (EN: demo dogs)")
         .addBearerAuth()
         .build()
 

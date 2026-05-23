@@ -10,16 +10,18 @@ import {
     HttpStatus,
     Param,
     Post,
+    Query,
 } from "@nestjs/common"
 import type {
-    User 
-} from "./interfaces/user.interface"
+    User
+} from "./interfaces"
 import {
-    UserService 
+    UserService
 } from "./user.service"
 import {
-    CreateUserDto 
-} from "./dto/create-user.dto"
+    CreateUserDto,
+    ListUsersQuery
+} from "./dto"
 
 /**
  * HTTP adapter cho resource users — minh hoạ DTO + ValidationPipe bảo vệ endpoint (EN: HTTP adapter for users; demonstrates DTO + ValidationPipe protection).
@@ -34,8 +36,10 @@ export class UserController {
      * @returns Promise<User[]> — Mảng user (có thá»ƒ rỗng) (EN: user array, possibly empty).
      */
     @Get()
-    async findAll(): Promise<User[]> {
-        return this.usersService.findAll()
+    async findAll(@Query() query: ListUsersQuery): Promise<User[]> {
+        // ValidationPipe + @Type(() => Number) đã ép `?page=1&limit=10` thành number trước khi vào đây
+        // (EN: ValidationPipe + @Type(() => Number) coerce `?page=1&limit=10` to numbers before reaching this handler).
+        return this.usersService.findAll(query.page, query.limit)
     }
 
     /**

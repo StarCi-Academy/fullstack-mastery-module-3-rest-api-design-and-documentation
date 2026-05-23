@@ -38,4 +38,12 @@ export class UserEntity {
         type: "int",
     })
         age: number
+
+    /**
+     * Địa chỉ JSON optional — hỗ trợ nested DTO demo (EN: optional JSON address — supports nested DTO demo).
+     */
+    @Column({
+        type: "jsonb", nullable: true,
+    })
+        address?: { city: string; zip: string } | null
 }

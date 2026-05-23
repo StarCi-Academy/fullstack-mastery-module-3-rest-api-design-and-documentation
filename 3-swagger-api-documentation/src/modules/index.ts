@@ -1,1 +1,2 @@
-﻿export * from "./cat"
+export * from "./cat"
+export * from "./dog"

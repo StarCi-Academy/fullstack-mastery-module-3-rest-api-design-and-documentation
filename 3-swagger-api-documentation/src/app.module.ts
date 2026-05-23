@@ -9,7 +9,8 @@ import {
     ConfigModule 
 } from "@nestjs/config"
 import {
-    CatModule 
+    CatModule,
+    DogModule
 } from "./modules"
 
 /**
@@ -22,6 +23,7 @@ import {
             envFilePath: [".env"],
         }),
         CatModule,
+        DogModule,
     ],
 })
 export class AppModule {}

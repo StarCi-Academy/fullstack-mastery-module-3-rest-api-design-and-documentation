@@ -12,14 +12,14 @@ import {
     Repository 
 } from "typeorm"
 import type {
-    User 
-} from "./interfaces/user.interface"
+    User
+} from "./interfaces"
 import {
-    UserEntity 
+    UserEntity
 } from "./user.entity"
 import type {
-    CreateUserDto 
-} from "./dto/create-user.dto"
+    CreateUserDto
+} from "./dto"
 
 /**
  * Service quản lý user trên PostgreSQL qua TypeORM — nghiệp vụ CRUD tách khá»i controller (EN: user persistence via TypeORM; CRUD logic stays out of controllers).
@@ -44,6 +44,7 @@ export class UserService {
             name: row.name,
             email: row.email,
             age: row.age,
+            address: row.address ?? null,
         }
     }
 
@@ -72,11 +73,14 @@ export class UserService {
      *
      * @returns Promise<User[]> — Danh sách theo id tÄƒng dần (EN: list ordered by id ascending).
      */
-    async findAll(): Promise<User[]> {
+    async findAll(page = 1, limit = 10): Promise<User[]> {
+        // Phân trang dựa trên page/limit đã được ValidationPipe ép kiểu (EN: paginate by page/limit already coerced by ValidationPipe).
         const rows = await this.usersRepo.find({
             order: {
-                id: "ASC" 
+                id: "ASC"
             },
+            skip: (page - 1) * limit,
+            take: limit,
         })
         return rows.map((r) => this.toUser(r))
     }
@@ -114,6 +118,7 @@ export class UserService {
             name: dto.name,
             email: dto.email,
             age: dto.age,
+            address: dto.address ?? null,
         })
         const saved = await this.usersRepo.save(entity)
         return this.toUser(saved)

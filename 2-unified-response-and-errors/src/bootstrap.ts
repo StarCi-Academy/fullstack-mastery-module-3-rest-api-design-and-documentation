@@ -3,6 +3,9 @@
  * (EN: Bootstrap Nest app — global TransformInterceptor + AllExceptionsFilter, listen on port.)
  */
 import {
+    ValidationPipe,
+} from "@nestjs/common"
+import {
     NestFactory,
     Reflector,
 } from "@nestjs/core"
@@ -17,6 +20,15 @@ import {
 export async function bootstrap(): Promise<void> {
     const app = await NestFactory.create(AppModule)
     const reflector = app.get(Reflector)
+    // Kích hoạt ValidationPipe — sinh BadRequestException với mảng message để filter chuẩn hoá.
+    // (EN: Enable ValidationPipe — produces BadRequestException with message array for the filter to normalize.)
+    app.useGlobalPipes(
+        new ValidationPipe({
+            whitelist: true,
+            forbidNonWhitelisted: true,
+            transform: true,
+        }),
+    )
     // Bọc success response thống nhất.
     // (EN: Unified success envelope.)
     app.useGlobalInterceptors(new TransformInterceptor(reflector))

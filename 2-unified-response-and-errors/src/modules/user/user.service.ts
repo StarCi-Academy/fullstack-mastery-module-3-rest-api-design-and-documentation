@@ -38,6 +38,20 @@ export class UsersService {
     }
 
     /**
+     * Tra cứu user theo id, trả undefined nếu không có (EN: lookup user by id; returns undefined if missing).
+     *
+     * @param id - Khoá id user dưới dạng chuỗi từ URL (EN: user id from URL string).
+     * @returns DemoUser hoặc undefined (EN: DemoUser or undefined).
+     */
+    findOne(id: string): DemoUser | undefined {
+        const parsed = Number(id)
+        if (!Number.isFinite(parsed)) {
+            return undefined
+        }
+        return this.users.find((u) => u.id === parsed)
+    }
+
+    /**
      * Tạo user mới với id tÄƒng dần (EN: creates a user with monotonic id).
      *
      * @param name - Tên hiá»ƒn thị (EN: display name).

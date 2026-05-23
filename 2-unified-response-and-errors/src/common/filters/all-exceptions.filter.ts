@@ -41,14 +41,42 @@ export class AllExceptionsFilter implements ExceptionFilter {
                 : "Internal Error"
 
         const message = this.resolveMessage(exception)
+        // Trích details cho validation/NotFound — giúp client parse chi tiết (EN: extract details for validation/NotFound; helps clients parse specifics).
+        const details = this.resolveDetails(exception)
 
         response.status(status).json({
             statusCode: status,
             error,
             message,
+            ...(details !== undefined ? {
+                details
+            } : {
+            }),
             timestamp: new Date().toISOString(),
             path: request.url,
         })
+    }
+
+    /**
+     * Lấy mảng `message` từ BadRequestException (ValidationPipe) hoặc `cause` từ NotFoundException (EN: lift `message` array from validation errors or `cause` from NotFoundException).
+     *
+     * @param exception - Giá trị được ném (EN: thrown value).
+     * @returns Mảng details hoặc undefined (EN: details array or undefined).
+     */
+    private resolveDetails(exception: unknown): unknown {
+        if (exception instanceof HttpException) {
+            const res = exception.getResponse()
+            if (typeof res === "object" && res !== null) {
+                const obj = res as { message?: unknown; details?: unknown }
+                if (Array.isArray(obj.message)) {
+                    return obj.message
+                }
+                if (obj.details !== undefined) {
+                    return obj.details
+                }
+            }
+        }
+        return undefined
     }
 
     /**

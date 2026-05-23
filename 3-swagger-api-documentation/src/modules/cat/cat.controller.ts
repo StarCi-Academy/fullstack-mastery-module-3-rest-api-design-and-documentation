@@ -11,6 +11,7 @@ import {
     Post,
 } from "@nestjs/common"
 import {
+    ApiBearerAuth,
     ApiOperation,
     ApiResponse,
     ApiTags,
@@ -25,8 +26,8 @@ import type {
     CatRecord 
 } from "./cat.service"
 import {
-    CreateCatDto 
-} from "./dto/create-cat.dto"
+    CreateCatDto
+} from "./dto"
 
 /**
  * HTTP `/cats` + decorator **OpenAPI** — khớp ví dụ giáo trình (EN: `/cats` HTTP surface with OpenAPI decorators per lesson).
@@ -62,6 +63,7 @@ export class CatController {
      */
     @Post()
     @HttpCode(HttpStatus.CREATED)
+    @ApiBearerAuth()
     @ApiOperation({
         summary: "Create a new cat",
     })
