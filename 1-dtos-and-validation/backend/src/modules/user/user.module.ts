@@ -1,4 +1,4 @@
-﻿/**
+/**
  * UserModule — dang ky cac thanh phan cua feature User.
  * (EN: UserModule — registers components for User feature.)
  */
@@ -13,7 +13,7 @@ import {
 } from "./user.controller"
 import {
     UserEntity 
-} from "./user.entity"
+} from "../../entities"
 import {
     UserService 
 } from "./user.service"

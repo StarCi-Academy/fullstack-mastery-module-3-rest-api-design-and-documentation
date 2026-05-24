@@ -27,21 +27,34 @@ async function testApi() {
 
     try {
         // Luồng 1
-        let r1 = await req('/users', 'POST', { name: "Alice", email: "alice@test.com" });
+        let r1 = await req('/users', 'POST', { name: "Alice", email: "alice@test.com", age: 25 });
         let d1 = JSON.parse(r1.data);
-        output += '**Luồng 1 — Payload hợp lệ (`POST /users`)**\n';
+        output += '## Flow 1 -- Valid payload (`POST /users`)\n';
         output += 'Tạo dữ liệu trả về ' + r1.status + ':\n```json\n' + JSON.stringify(d1, null, 2) + '\n```\n\n';
 
         // Luồng 2
         let r2 = await req('/users', 'POST', { name: 123 });
         let d2 = JSON.parse(r2.data);
-        output += '**Luồng 2 — Payload không hợp lệ (`POST /users`)**\n';
+        output += '## Flow 2 -- Invalid payload (`POST /users`)\n';
         output += 'Trả về ' + r2.status + ':\n```json\n' + JSON.stringify(d2, null, 2) + '\n```\n\n';
 
-        output += '**Các thay đổi đã thực hiện:**\n- `ConfigModule` và `.env` được config chuẩn chỉ, `ValidationPipe` chặn bad request.\n\n';
-        output += '(Luồng DTOs Validation hoạt động chính xác với whitelist chặn payload lạ.)';
+        // Luồng 3
+        let r3 = await req('/users?page=1&limit=5', 'GET');
+        let d3 = JSON.parse(r3.data);
+        output += '## Flow 3 -- Type coercion (`GET /users?page=1&limit=5`)\n';
+        output += 'Trả về ' + r3.status + ':\n```json\n' + JSON.stringify(d3, null, 2) + '\n```\n\n';
 
-        fs.writeFileSync('c:/Repositories/ac/starci-academy-backend/.mount/data/courses/0-fullstack-mastery/modules/2-rest-api-development-documentation/contents/1-dtos-and-validation/test.md', output, 'utf8');
+        // Luồng 4
+        let r4 = await req('/users', 'POST', { name: "Bob", email: "bob@test.com", age: 25, address: { city: "H", zip: "abc" } });
+        let d4 = JSON.parse(r4.data);
+        output += '## Flow 4 -- Nested DTO (`POST /users` with bad address)\n';
+        output += 'Trả về ' + r4.status + ':\n```json\n' + JSON.stringify(d4, null, 2) + '\n```\n\n';
+
+        output += '## Notes\n\n- The L1 module requires PostgreSQL running via `docker compose -f .docker/compose.yaml up -d` before `nest start --watch`.\n- `ConfigModule` ships defaults in `.env`; only override for non-default ports/credentials.\n';
+
+        const mountPath = 'c:/Repositories/ac/starci-academy-backend/.mount/data/courses/0-fullstack-mastery/modules/2-rest-api-design-and-documentation/contents/1-dtos-and-validation/test.md';
+        fs.writeFileSync(mountPath, output, 'utf8');
+        fs.writeFileSync('test.md', output, 'utf8');
         console.log("Done generating test.md");
     } catch (e) {
         console.error(e);

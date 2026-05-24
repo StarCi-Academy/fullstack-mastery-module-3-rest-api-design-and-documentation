@@ -8,31 +8,31 @@
 Tạo dữ liệu mẫu trả về 201:
 ```json
 {
-  "id": "rd2lpa",
+  "id": "t682m",
   "name": "Chelsea Koelpin",
   "email": "Chelsea_Wolf@hotmail.com"
 }
 ```
-Pass criteria: status 201, body chứa `id`, `name`, `email` của user vừa seed.
+Pass criteria: response status là 201 và body chứa `id`, `name`, `email` của user vừa được seed.
 
 **Luồng 2 -- Read list (`GET /users`)**
 Lấy danh sách trả về 200:
 ```json
 [
   {
-    "id": "rd2lpa",
+    "id": "t682m",
     "name": "Chelsea Koelpin",
     "email": "Chelsea_Wolf@hotmail.com"
   }
 ]
 ```
-Pass criteria: status 200, body là array không rỗng, chứa user vừa seed ở Luồng 1.
+Pass criteria: status 200, body là array không rỗng, chứa user vừa seed ở Luồng 1 (proves persistence reused across requests).
 
 **Luồng 3 -- Create new user (`POST /users`)**
 Trả về 201:
 ```json
 {
-  "id": "v87lrn",
+  "id": "pgvt7",
   "name": "Bob",
   "email": "bob@test.com"
 }
@@ -42,7 +42,7 @@ Trả về 201:
 Trả về 200:
 ```json
 {
-  "id": "v87lrn",
+  "id": "pgvt7",
   "name": "Bob Updated",
   "email": "bob2@test.com"
 }
@@ -52,7 +52,7 @@ Trả về 200:
 Trả về 200:
 ```json
 {
-  "id": "v87lrn",
+  "id": "pgvt7",
   "name": "Bob Patched",
   "email": "bob2@test.com"
 }

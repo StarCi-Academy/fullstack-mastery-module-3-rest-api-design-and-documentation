@@ -5,5 +5,4 @@
 export { UserModule } from "./user.module"
 export { UserService } from "./user.service"
 export { UserController } from "./user.controller"
-export { UserEntity } from "./user.entity"
 export type { User } from "./interfaces"

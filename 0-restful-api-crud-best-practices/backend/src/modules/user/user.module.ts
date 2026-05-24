@@ -1,4 +1,4 @@
-﻿/**
+/**
  * UserModule — dang ky cac thanh phan cua feature User.
  * (EN: UserModule — registers components for User feature.)
  */
@@ -13,13 +13,13 @@ import {
 } from "./user.controller"
 import {
     UserEntity 
-} from "./user.entity"
+} from "../../entities"
 import {
     UserService 
 } from "./user.service"
 
 /**
- * Module user — Ä‘Äƒng ký TypeORM feature + controller + service cho resource `/users` (EN: registers TypeORM feature, controller, and service for `/users`).
+ * Module user — đăng ký TypeORM feature + controller + service cho resource `/users` (EN: registers TypeORM feature, controller, and service for `/users`).
  */
 @Module({
     imports: [TypeOrmModule.forFeature([UserEntity])],

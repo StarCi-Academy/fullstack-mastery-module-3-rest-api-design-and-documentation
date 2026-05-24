@@ -15,7 +15,10 @@ import {
     databaseConfig, DatabaseConfig 
 } from "./config"
 import {
-    UserEntity, UserModule 
+    UserEntity 
+} from "./entities"
+import {
+    UserModule 
 } from "./modules"
 
 /**

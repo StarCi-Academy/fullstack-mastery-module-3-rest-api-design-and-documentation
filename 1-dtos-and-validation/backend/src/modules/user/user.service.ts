@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Service xu ly logic nghiep vu cua User.
  * (EN: Business logic service for User.)
  */
@@ -16,7 +16,7 @@ import type {
 } from "./interfaces"
 import {
     UserEntity
-} from "./user.entity"
+} from "../../entities"
 import type {
     CreateUserDto
 } from "./dto"

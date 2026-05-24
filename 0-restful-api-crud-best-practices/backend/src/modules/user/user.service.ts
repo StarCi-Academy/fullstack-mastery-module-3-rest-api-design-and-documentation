@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Service xu ly logic nghiep vu cua User.
  * (EN: Business logic service for User.)
  */
@@ -19,7 +19,7 @@ import {
 } from "./interfaces/user.interface"
 import {
     UserEntity 
-} from "./user.entity"
+} from "../../entities"
 
 /**
  * Service quản lý user trên PostgreSQL qua TypeORM — nghiệp vụ CRUD tách khá»i controller (EN: user persistence via TypeORM; CRUD logic stays out of controllers).
