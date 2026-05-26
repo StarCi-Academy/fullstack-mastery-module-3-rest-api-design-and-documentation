@@ -1,8 +1,8 @@
 # Stack hạ tầng bài 0-restful-api-crud-best-practices — chỉ infra, backend chạy local (nest start).
 # (EN: Infrastructure stack for 0-restful-api-crud-best-practices — infra only, backend runs locally.)
 #
-# Thư mục: cd fullstack-mastery-module-3-rest-api-development-documentation/0-restful-api-crud-best-practices/.docker
-# (EN: Working dir: cd fullstack-mastery-module-3-rest-api-development-documentation/0-restful-api-crud-best-practices/.docker)
+# Thư mục: cd fullstack-mastery-module-3-rest-api-design-and-documentation/0-restful-api-crud-best-practices/.docker
+# (EN: Working dir: cd fullstack-mastery-module-3-rest-api-design-and-documentation/0-restful-api-crud-best-practices/.docker)
 #
 # Khởi chạy: docker compose up -d
 # (EN: Start: docker compose up -d)

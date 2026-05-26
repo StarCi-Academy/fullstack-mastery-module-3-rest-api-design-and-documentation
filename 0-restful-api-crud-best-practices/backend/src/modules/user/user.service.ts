@@ -1,28 +1,28 @@
 /**
- * Service xu ly logic nghiep vu cua User.
+ * Service xử lý logic nghiệp vụ của User.
  * (EN: Business logic service for User.)
  */
 import {
-    faker 
+    faker
 } from "@faker-js/faker"
 import {
-    Injectable, NotFoundException 
+    Injectable, NotFoundException
 } from "@nestjs/common"
 import {
-    InjectRepository 
+    InjectRepository
 } from "@nestjs/typeorm"
 import {
-    Repository 
+    Repository
 } from "typeorm"
 import {
-    User 
+    User
 } from "./interfaces/user.interface"
 import {
-    UserEntity 
+    UserEntity
 } from "../../entities"
 
 /**
- * Service quản lý user trên PostgreSQL qua TypeORM — nghiệp vụ CRUD tách khá»i controller (EN: user persistence via TypeORM; CRUD logic stays out of controllers).
+ * Service quản lý user trên PostgreSQL qua TypeORM — nghiệp vụ CRUD tách khỏi controller (EN: user persistence via TypeORM; CRUD logic stays out of controllers).
  * Tuân thủ repo rule: không nhồi logic vào controller (EN: keeps controllers free of business rules).
  */
 @Injectable()
@@ -33,34 +33,28 @@ export class UserService {
     ) {}
 
     /**
-     * Xóa toàn bá»™ bản ghi `users` — chỉ dùng cho endpoint demo dá»n seed (EN: wipe all rows; demo cleanup only).
+     * Xóa toàn bộ bản ghi `users` — chỉ dùng cho endpoint demo dọn seed (EN: wipe all rows; demo cleanup only).
      *
      * @returns Promise<void> — Hoàn tất sau khi bảng rỗng (EN: resolves when table is empty).
-     * @sideEffects DELETE toàn bá»™ trên bảng `users` (EN: deletes every row in `users`).
+     * @sideEffects DELETE toàn bộ trên bảng `users` (EN: deletes every row in `users`).
      */
     async removeAll(): Promise<void> {
         await this.usersRepo.clear()
     }
 
     /**
-     * Tạo đúng má»™t user với `name`/`email` từ **@faker-js/faker** — `faker.seed(1337)` Ä‘á»ƒ output ổn định cho tài liệu (EN: insert one user; fixed faker seed for reproducible lesson samples).
+     * Tạo đúng một user với `name`/`email` từ **@faker-js/faker** — `faker.seed(1337)` để output ổn định cho tài liệu (EN: insert one user; fixed faker seed for reproducible lesson samples).
      *
      * @returns Promise<User> — Bản ghi vừa tạo (EN: newly created row).
-     * @sideEffects INSERT má»™t dòng (EN: inserts one row).
+     * @sideEffects INSERT một dòng (EN: inserts one row).
      */
     async seedOneWithFaker(): Promise<User> {
         faker.seed(1337)
         const name = faker.person.fullName()
         const first = name.split(" ")[0] ?? "user"
-        const email = faker.internet.email({
-            firstName: first,
-        })
+        const email = faker.internet.email({ firstName: first })
         const id = await this.nextUniqueShortId()
-        const entity = this.usersRepo.create({
-            id,
-            name,
-            email,
-        })
+        const entity = this.usersRepo.create({ id, name, email })
         const saved = await this.usersRepo.save(entity)
         return this.toUser(saved)
     }
@@ -80,20 +74,16 @@ export class UserService {
     }
 
     /**
-     * Sinh id ngắn chưa tồn tại — retry giới hạn Ä‘á»ƒ tránh vòng lặp vô hạn (EN: generate short unused id with bounded retries).
+     * Sinh id ngắn chưa tồn tại — retry giới hạn để tránh vòng lặp vô hạn (EN: generate short unused id with bounded retries).
      *
      * @returns Promise<string> — Id dùng cho `POST /users` (EN: id for new user create).
      */
     private async nextUniqueShortId(): Promise<string> {
-        // Giới hạn số lần thử Ä‘á»ƒ tránh treo nếu entropy kém (EN: cap attempts to avoid a tight loop on bad luck).
+        // Giới hạn số lần thử để tránh treo nếu entropy kém (EN: cap attempts to avoid a tight loop on bad luck).
         for (let attempt = 0; attempt < 32; attempt += 1) {
             const candidate = Math.random().toString(36).substring(7)
-            // Kiá»ƒm tra trùng khóa trước khi insert (EN: check duplicate key before insert).
-            const exists = await this.usersRepo.exist({
-                where: {
-                    id: candidate 
-                },
-            })
+            // Kiểm tra trùng khóa trước khi insert (EN: check duplicate key before insert).
+            const exists = await this.usersRepo.exist({ where: { id: candidate } })
             if (!exists) {
                 return candidate
             }
@@ -102,17 +92,13 @@ export class UserService {
     }
 
     /**
-     * Äá»c toàn bá»™ user đang lưu (EN: read all stored users).
+     * Đọc toàn bộ user đang lưu (EN: read all stored users).
      *
-     * @returns Promise<User[]> — Danh sách theo id tÄƒng dần (EN: list ordered by id ascending).
+     * @returns Promise<User[]> — Danh sách theo id tăng dần (EN: list ordered by id ascending).
      */
     async findAll(): Promise<User[]> {
         // Order cố định giúp curl dễ đối chiếu giữa các lần chạy (EN: stable order helps curl comparisons across runs).
-        const rows = await this.usersRepo.find({
-            order: {
-                id: "ASC" 
-            },
-        })
+        const rows = await this.usersRepo.find({ order: { id: "ASC" } })
         return rows.map((r) => this.toUser(r))
     }
 
@@ -124,11 +110,7 @@ export class UserService {
      * @sideEffects Ném NotFoundException khi không có bản ghi (EN: throws NotFoundException when missing).
      */
     async findOne(id: string): Promise<User> {
-        const row = await this.usersRepo.findOne({
-            where: {
-                id 
-            },
-        })
+        const row = await this.usersRepo.findOne({ where: { id } })
         if (!row) {
             throw new NotFoundException(`User with ID ${id} not found`)
         }
@@ -138,7 +120,7 @@ export class UserService {
     /**
      * Tạo user mới với id ngẫu nhiên ngắn (EN: create user with short random id).
      *
-     * @param payload - name/email tùy chá»n (EN: optional name/email).
+     * @param payload - name/email tùy chọn (EN: optional name/email).
      * @returns Promise<User> — Bản ghi mới đã persist (EN: newly persisted record).
      * @sideEffects INSERT vào PostgreSQL (EN: inserts into PostgreSQL).
      */
@@ -162,11 +144,7 @@ export class UserService {
      * @sideEffects UPDATE trên PostgreSQL (EN: updates PostgreSQL row).
      */
     async update(id: string, payload: Partial<User>): Promise<User> {
-        const row = await this.usersRepo.findOne({
-            where: {
-                id 
-            },
-        })
+        const row = await this.usersRepo.findOne({ where: { id } })
         if (!row) {
             throw new NotFoundException(`User with ID ${id} not found`)
         }
@@ -184,22 +162,11 @@ export class UserService {
      * @returns Promise<User> — Entity sau patch (EN: entity after patch).
      */
     async patch(id: string, payload: Partial<User>): Promise<User> {
-        const row = await this.usersRepo.findOne({
-            where: {
-                id 
-            },
-        })
-        if (!row) {
-            throw new NotFoundException(`User with ID ${id} not found`)
-        }
-        if (payload.name !== undefined) {
-            row.name = payload.name
-        }
-        if (payload.email !== undefined) {
-            row.email = payload.email
-        }
-        const saved = await this.usersRepo.save(row)
-        return this.toUser(saved)
+        const row = await this.usersRepo.findOne({ where: { id } })
+        if (!row) throw new NotFoundException(`User with ID ${id} not found`)
+        if (payload.name !== undefined) row.name = payload.name
+        if (payload.email !== undefined) row.email = payload.email
+        return this.toUser(await this.usersRepo.save(row))
     }
 
     /**
@@ -210,9 +177,7 @@ export class UserService {
      * @sideEffects DELETE trên PostgreSQL (EN: deletes PostgreSQL row).
      */
     async remove(id: string): Promise<void> {
-        const result = await this.usersRepo.delete({
-            id 
-        })
+        const result = await this.usersRepo.delete({ id })
         if (!result.affected || result.affected === 0) {
             throw new NotFoundException("Cannot delete: User not found")
         }

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Controller REST cho feature User.
  * (EN: REST controller for User feature.)
  */
@@ -22,14 +22,14 @@ import {
 } from "./user.service"
 
 /**
- * HTTP adapter cho resource users — không chứa nghiệp vụ, chỉ ủy quyá»n cho service (EN: HTTP adapter; delegates to service only).
+ * HTTP adapter cho resource users — không chứa nghiệp vụ, chỉ ủy quyền cho service (EN: HTTP adapter; delegates to service only).
  */
 @Controller("users")
 export class UserController {
     constructor(private readonly usersService: UserService) { }
 
     /**
-     * Demo: xóa hết bản ghi `users` (dá»n seed / reset bài lab) (EN: demo wipe-all for lesson reset).
+     * Demo: xóa hết bản ghi `users` (dọn seed / reset bài lab) (EN: demo wipe-all for lesson reset).
      *
      * @returns Promise<void> — **HTTP 204** không body (EN: **HTTP 204** no body).
      */
@@ -40,7 +40,7 @@ export class UserController {
     }
 
     /**
-     * Demo: tạo má»™t user bằng **@faker-js/faker** (`faker.seed(1337)`) (EN: demo insert one faker-backed user).
+     * Demo: tạo một user bằng **@faker-js/faker** (`faker.seed(1337)`) (EN: demo insert one faker-backed user).
      *
      * @returns Promise<User> — **HTTP 201** + JSON user (EN: **HTTP 201** + user JSON).
      */
@@ -53,7 +53,7 @@ export class UserController {
     /**
      * Trả danh sách user hiện có trong PostgreSQL (EN: return all users from PostgreSQL).
      *
-     * @returns Promise<User[]> — Mảng user (có thá»ƒ rỗng) (EN: user array, possibly empty).
+     * @returns Promise<User[]> — Mảng user (có thể rỗng) (EN: user array, possibly empty).
      */
     @Get()
     async findAll(): Promise<User[]> {
@@ -61,11 +61,11 @@ export class UserController {
     }
 
     /**
-     * Lấy má»™t user theo id (EN: fetch one user by id).
+     * Lấy một user theo id (EN: fetch one user by id).
      *
      * @param id - Khóa định danh user (EN: user identifier).
      * @returns Promise<User> — Bản ghi tìm thấy (EN: found record).
-     * @sideEffects Có thá»ƒ ném NotFoundException nếu id không tồn tại (EN: may throw NotFoundException if missing).
+     * @sideEffects Có thể ném NotFoundException nếu id không tồn tại (EN: may throw NotFoundException if missing).
      */
     @Get(":id")
     async findOne(@Param("id") id: string): Promise<User> {
@@ -75,7 +75,7 @@ export class UserController {
     /**
      * Tạo user mới từ payload (EN: create a new user from body).
      *
-     * @param payload - name/email tùy chá»n (EN: optional name/email).
+     * @param payload - name/email tùy chọn (EN: optional name/email).
      * @returns Promise<User> — Bản ghi vừa tạo (EN: newly created record).
      * @sideEffects INSERT vào PostgreSQL (EN: inserts into PostgreSQL).
      */
@@ -86,7 +86,7 @@ export class UserController {
     }
 
     /**
-     * Thay thế toàn bá»™ field name/email theo payload (PUT semantics) (EN: full replace of name/email per PUT semantics).
+     * Thay thế toàn bộ field name/email theo payload (PUT semantics) (EN: full replace of name/email per PUT semantics).
      *
      * @param id - ID user cần cập nhật (EN: user id to update).
      * @param payload - Giá trị thay thế (EN: replacement values).
@@ -97,12 +97,11 @@ export class UserController {
         @Param("id") id: string,
         @Body() payload: Partial<User>,
     ): Promise<User> {
-        return this.usersService.update(id,
-            payload)
+        return this.usersService.update(id, payload)
     }
 
     /**
-     * Cập nhật má»™t phần field được gửi lên (PATCH semantics) (EN: partial update for provided fields only).
+     * Cập nhật một phần field được gửi lên (PATCH semantics) (EN: partial update for provided fields only).
      *
      * @param id - ID user (EN: user id).
      * @param payload - Chỉ field được gửi mới đổi (EN: only sent fields change).
@@ -113,8 +112,7 @@ export class UserController {
         @Param("id") id: string,
         @Body() payload: Partial<User>,
     ): Promise<User> {
-        return this.usersService.patch(id,
-            payload)
+        return this.usersService.patch(id, payload)
     }
 
     /**
