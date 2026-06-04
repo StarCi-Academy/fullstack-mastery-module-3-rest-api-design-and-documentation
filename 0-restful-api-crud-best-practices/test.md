@@ -8,7 +8,7 @@
 Tạo dữ liệu mẫu trả về 201:
 ```json
 {
-  "id": "t682m",
+  "id": "06xi7",
   "name": "Chelsea Koelpin",
   "email": "Chelsea_Wolf@hotmail.com"
 }
@@ -20,7 +20,7 @@ Lấy danh sách trả về 200:
 ```json
 [
   {
-    "id": "t682m",
+    "id": "06xi7",
     "name": "Chelsea Koelpin",
     "email": "Chelsea_Wolf@hotmail.com"
   }
@@ -32,7 +32,7 @@ Pass criteria: status 200, body là array không rỗng, chứa user vừa seed 
 Trả về 201:
 ```json
 {
-  "id": "pgvt7",
+  "id": "tim56k",
   "name": "Bob",
   "email": "bob@test.com"
 }
@@ -42,7 +42,7 @@ Trả về 201:
 Trả về 200:
 ```json
 {
-  "id": "pgvt7",
+  "id": "tim56k",
   "name": "Bob Updated",
   "email": "bob2@test.com"
 }
@@ -52,7 +52,7 @@ Trả về 200:
 Trả về 200:
 ```json
 {
-  "id": "pgvt7",
+  "id": "tim56k",
   "name": "Bob Patched",
   "email": "bob2@test.com"
 }

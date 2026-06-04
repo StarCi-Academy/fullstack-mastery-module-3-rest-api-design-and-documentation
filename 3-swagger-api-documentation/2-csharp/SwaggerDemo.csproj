@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!-- Generate the XML documentation file so Swashbuckle can read /// summaries
+         (EN: enable XML doc output consumed by Swashbuckle to enrich the OpenAPI spec). -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!-- Suppress "missing XML comment" warnings on members we intentionally leave undocumented
+         (EN: silence CS1591 so a partial XML-doc surface does not fail the build). -->
+    <NoWarn>$(NoWarn);1591</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.6.2" />
+  </ItemGroup>
+
+</Project>
