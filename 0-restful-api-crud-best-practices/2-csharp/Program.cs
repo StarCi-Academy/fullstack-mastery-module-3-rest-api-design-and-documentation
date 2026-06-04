@@ -7,9 +7,14 @@ var builder = WebApplication.CreateBuilder(args);
 var port = Environment.GetEnvironmentVariable("PORT") ?? "3000";
 builder.WebHost.UseUrls($"http://*:{port}");
 
-// Configure EF Core with PostgreSQL
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
-    ?? "Host=localhost;Database=starci;Username=starci;Password=starci";
+// Configure EF Core with PostgreSQL using Environment Variables
+var pgHost = Environment.GetEnvironmentVariable("POSTGRES_HOST") ?? "localhost";
+var pgPort = Environment.GetEnvironmentVariable("POSTGRES_PORT") ?? "5432";
+var pgUser = Environment.GetEnvironmentVariable("POSTGRES_USER") ?? "postgres";
+var pgPass = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD") ?? "postgres";
+var pgDb = Environment.GetEnvironmentVariable("POSTGRES_DB") ?? "restful_demo";
+
+var connectionString = $"Host={pgHost};Port={pgPort};Database={pgDb};Username={pgUser};Password={pgPass};";
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
 

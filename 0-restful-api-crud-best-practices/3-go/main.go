@@ -37,8 +37,27 @@ func nextUniqueShortId(db *gorm.DB) string {
 }
 
 func main() {
-	// Connect to database
-	dsn := "host=localhost user=starci password=starci dbname=starci port=5432 sslmode=disable"
+	host := os.Getenv("POSTGRES_HOST")
+	if host == "" {
+		host = "localhost"
+	}
+	port_env := os.Getenv("POSTGRES_PORT")
+	if port_env == "" {
+		port_env = "5432"
+	}
+	user := os.Getenv("POSTGRES_USER")
+	if user == "" {
+		user = "starci"
+	}
+	password := os.Getenv("POSTGRES_PASSWORD")
+	if password == "" {
+		password = "starci"
+	}
+	dbname := os.Getenv("POSTGRES_DB")
+	if dbname == "" {
+		dbname = "starci"
+	}
+	dsn := "host=" + host + " user=" + user + " password=" + password + " dbname=" + dbname + " port=" + port_env + " sslmode=disable"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic("Failed to connect to database: " + err.Error())

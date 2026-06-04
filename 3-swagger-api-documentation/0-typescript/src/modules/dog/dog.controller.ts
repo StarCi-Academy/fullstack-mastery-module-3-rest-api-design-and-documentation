@@ -35,7 +35,7 @@ export class DogController {
         status: 200,
         description: "List of dogs returned",
     })
-Get all dogs success)"
+    @ResponseMessage("Get all dogs success")
     findAll(): DogRecord[] {
         return this.dogService.findAll()
     }

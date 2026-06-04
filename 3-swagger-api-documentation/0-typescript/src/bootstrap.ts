@@ -36,13 +36,10 @@ export async function bootstrap(): Promise<void> {
     app.useGlobalInterceptors(new TransformInterceptor(reflector))
     app.useGlobalFilters(new AllExceptionsFilter())
 
-    // DocumentBuilder configures metadata, route grouping tags, and the bearer auth scheme.
     const openApiConfig = new DocumentBuilder()
         .setTitle("StarCi Academy Backend")
         .setDescription("API documentation for the REST API Design & Documentation lesson")
         .setVersion("1.0")
-demo cats)"
-demo dogs)"
         .addBearerAuth()
         .build()
 

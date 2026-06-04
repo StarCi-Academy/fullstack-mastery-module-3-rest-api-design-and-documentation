@@ -34,7 +34,7 @@ export class UsersController {
      * demo user list.
      */
     @Get()
-Get all success)"
+    @ResponseMessage("Get all success")
     findAll(): DemoUser[] {
         return this.usersService.findAll()
     }
@@ -45,7 +45,7 @@ Get all success)"
      * throws NotFoundException when id absent.
      */
     @Get(":id")
-Find user success)"
+    @ResponseMessage("Find user success")
     findOne(@Param("id") id: string): DemoUser {
         const user = this.usersService.findOne(id)
         if (!user) {
@@ -68,7 +68,7 @@ Find user success)"
      */
     @Post()
     @HttpCode(HttpStatus.CREATED)
-Create success)"
+    @ResponseMessage("Create success")
     create(@Body() dto: CreateUserDto): { id: number; name: string } {
         return this.usersService.create(dto.name.trim())
     }

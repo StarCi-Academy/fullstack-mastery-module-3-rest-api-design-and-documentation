@@ -1,4 +1,4 @@
-﻿/**
+/**
  * REST controller for Cat feature.
  */
 import {
@@ -47,7 +47,7 @@ export class CatController {
         status: 200,
         description: "List of cats returned",
     })
-Get all cats success)"
+    @ResponseMessage("Get all cats success")
     findAll(): CatRecord[] {
         return this.catService.findAll()
     }
