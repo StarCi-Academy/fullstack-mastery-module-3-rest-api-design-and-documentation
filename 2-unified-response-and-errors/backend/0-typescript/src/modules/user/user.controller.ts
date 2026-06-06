@@ -39,6 +39,28 @@ export class UsersController {
         return this.usersService.findAll()
     }
 
+    /** GET /users/boom — deliberately throws an unhandled Error to demonstrate
+     * that `AllExceptionsFilter` catches **any** exception and returns a 500
+     * generic error envelope with NO stack trace exposed to the client.
+     *
+     * Teaching intent: this is Flow 4 — even a plain `throw new Error(...)` that
+     * bypasses all domain exception handling is intercepted at the boundary and
+     * normalized to `{ statusCode: 500, error: "Internal Error", message: "Internal Server Error", ... }`.
+     * The real error detail stays on the server (logged), never reaching the client.
+     *
+     * IMPORTANT: this route must be registered BEFORE @Get(":id") so NestJS matches
+     * the literal path segment "boom" before the wildcard parameter captures it.
+     *
+     * @throws Error - intentional unhandled error; caught by AllExceptionsFilter.
+     */
+    @Get("boom")
+    boom(): never {
+        // Deliberately throw a plain Error with a sensitive-looking message to prove
+        // the filter strips it before the response — the client only ever sees the
+        // generic "Internal Server Error" message, never "boom" or any stack trace.
+        throw new Error("boom")
+    }
+
     /** lookup user; throws structured NotFoundException when missing.
      * user id key.
      * found user.

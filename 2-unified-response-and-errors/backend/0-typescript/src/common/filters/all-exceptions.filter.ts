@@ -52,14 +52,15 @@ export class AllExceptionsFilter implements ExceptionFilter {
         // Use the exception class name as the `error` discriminator so clients
         // can branch on type ("NotFoundException", "BadRequestException"…).
         // Unknown exceptions get a safe generic label — no internal class name exposed.
+        // 5xx exceptions always use "Internal Error" to hide internal class names.
         const error =
-            exception instanceof HttpException
+            exception instanceof HttpException && exception.getStatus() < 500
                 ? exception.constructor.name
                 : "Internal Error"
 
-        // Extract the human-readable message; array messages from ValidationPipe
-        // are joined into a single string here (the array itself goes to `details`).
-        const message = this.resolveMessage(exception)
+        // For 5xx (server errors), always return the safe generic message.
+        // For 4xx (client errors), extract the human-readable message from the exception.
+        const message = status >= 500 ? "Internal Server Error" : this.resolveMessage(exception)
 
         // Extract structured details (validation array or NotFound resource info)
         // only when present — the spread below omits the key entirely if undefined.
@@ -124,6 +125,12 @@ export class AllExceptionsFilter implements ExceptionFilter {
      */
     private resolveMessage(exception: unknown): string {
         if (exception instanceof HttpException) {
+            // HTTP 5xx errors are server-side failures — never expose the internal
+            // message (may contain SQL, file paths, secret values).
+            // Return the safe generic string regardless of what the wrapped exception says.
+            if (exception.getStatus() >= 500) {
+                return "Internal Server Error"
+            }
             const res = exception.getResponse()
             // String payload: already the message.
             if (typeof res === "string") {
@@ -141,11 +148,9 @@ export class AllExceptionsFilter implements ExceptionFilter {
                 }
             }
         }
-        if (exception instanceof Error) {
-            // Known domain Error with a meaningful message (not an internal exception).
-            return exception.message
-        }
-        // Truly unknown value — never risk leaking internals via toString().
+        // Non-HttpException (plain Error, unexpected throws) — NEVER expose the error
+        // message to the client: it may contain SQL, file paths, or secret values.
+        // Always return the safe generic string; log the real reason server-side.
         return "Internal Server Error"
     }
 }

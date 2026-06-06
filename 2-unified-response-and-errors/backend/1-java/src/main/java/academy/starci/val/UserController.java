@@ -54,6 +54,26 @@ public class UserController {
     }
 
     /**
+     * GET /users/boom — deliberately throws an unhandled {@link RuntimeException} to demonstrate
+     * that {@link GlobalExceptionHandler#handleGenericException} catches ANY exception and returns
+     * a 500 generic error envelope with NO stack trace or internal message exposed to the client.
+     *
+     * <p>Teaching intent (Flow 4): even a plain {@code throw new RuntimeException(...)} that
+     * bypasses all domain exception handling is intercepted at the boundary and normalized to
+     * {@code { statusCode: 500, error: "Internal Error", message: "Internal Server Error", ... }}.
+     * The real error detail stays on the server (logs), never reaching the client.</p>
+     *
+     * @return never returns — always throws.
+     * @throws RuntimeException intentional unhandled exception; caught by GlobalExceptionHandler.
+     */
+    @GetMapping("/boom")
+    public ResponseEntity<Map<String, Object>> boom() {
+        // Deliberately throw with a sensitive-looking message to prove the handler strips it.
+        // The client only ever sees "Internal Server Error", never this literal string.
+        throw new RuntimeException("boom");
+    }
+
+    /**
      * GET /users/{id} — looks up a user by id; throws a structured NotFoundException when absent.
      *
      * <p>Non-numeric ids are treated the same as missing numeric ids: both throw

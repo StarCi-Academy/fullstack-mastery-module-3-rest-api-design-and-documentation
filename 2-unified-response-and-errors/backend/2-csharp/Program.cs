@@ -139,6 +139,24 @@ app.MapGet("/users", () =>
     return Results.Ok(body);
 });
 
+// GET /users/boom — deliberately throws an unhandled Exception to demonstrate that
+// the global middleware catch(Exception) block intercepts ANY exception and returns
+// a 500 generic error envelope with NO stack trace or internal message exposed to the client.
+//
+// Teaching intent (Flow 4): even a plain `throw new Exception(...)` that bypasses all domain
+// exception handling is caught at the boundary and normalized to:
+//   { statusCode: 500, error: "Internal Error", message: "Internal Server Error", ... }
+// The real error detail stays server-side (logs), never reaching the client.
+//
+// Route is defined BEFORE /users/{id} so ASP.NET Core matches "boom" literally
+// rather than treating it as a route parameter.
+app.MapGet("/users/boom", () =>
+{
+    // Deliberately throw with a sensitive-looking message to prove the middleware strips it.
+    // The client only ever sees "Internal Server Error", never this literal string.
+    throw new Exception("boom");
+});
+
 // GET /users/{id} — look up a user by numeric id; throw NotFoundException if absent or non-numeric.
 app.MapGet("/users/{id}", (string id) =>
 {

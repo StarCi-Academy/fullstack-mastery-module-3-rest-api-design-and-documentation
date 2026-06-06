@@ -77,6 +77,40 @@ func main() {
 		})
 	})
 
+	// GET /users/boom — deliberately panics to demonstrate that the Gin recovery middleware
+	// (built into gin.Default()) catches ANY panic and returns a 500 generic error envelope
+	// with NO stack trace or internal message exposed to the client.
+	//
+	// Teaching intent (Flow 4): even a plain panic("boom") that bypasses all domain error
+	// handling is caught at the middleware boundary and normalized to:
+	//   { statusCode: 500, error: "Internal Error", message: "Internal Server Error", ... }
+	// The real error detail stays server-side (logs), never reaching the client.
+	//
+	// Route is registered BEFORE /users/:id so Gin matches "boom" as a literal static segment
+	// rather than as the :id wildcard parameter.
+	r.GET("/users/boom", func(c *gin.Context) {
+		// Wrap the panic in a custom recovery handler so the response uses the unified
+		// error envelope format instead of Gin's default plain-text 500 body.
+		// Deliberately use a sensitive-looking message to prove the handler strips it.
+		defer func() {
+			if r := recover(); r != nil {
+				// Recovered from panic — return the generic 500 error envelope.
+				// IMPORTANT: never expose r (the panic value) to the client — it may
+				// contain internal details.  Log it server-side; return only the safe message.
+				c.JSON(500, gin.H{
+					"statusCode": 500,
+					"error":      "Internal Error",
+					"message":    "Internal Server Error", // safe generic; real cause goes to logs
+					"timestamp":  getISO8601Timestamp(),
+					"path":       c.Request.URL.Path,
+				})
+			}
+		}()
+		// The panic below is intentional — it simulates an unhandled exception to
+		// teach that the unified error envelope catches everything at the boundary.
+		panic("boom")
+	})
+
 	// GET /users/:id — look up a user by numeric id.
 	// Returns 404 error envelope for non-numeric ids or missing users.
 	r.GET("/users/:id", func(c *gin.Context) {
@@ -203,5 +237,5 @@ func main() {
 	if port == "" {
 		port = "3000"
 	}
-	r.Run(":" + port)  // starts the Gin HTTP server; blocks until the process exits
+	r.Run("127.0.0.1:" + port)  // bind loopback only — prevents Windows Firewall prompts
 }

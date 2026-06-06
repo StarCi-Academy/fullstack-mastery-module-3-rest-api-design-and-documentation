@@ -65,5 +65,5 @@ export async function bootstrap(): Promise<void> {
     // Using a numeric coercion is safe here because bootstrap is the only place
     // that reads process.env directly (all business code goes through env config).
     const port = Number(process.env.PORT) || 3000
-    await app.listen(port, "0.0.0.0")
+    await app.listen(port, "127.0.0.1")
 }
