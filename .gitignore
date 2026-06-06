@@ -67,4 +67,9 @@ obj/
 # Go build artifacts
 *.exe
 *.test
-*.out
+*.out.next/
+out/
+.gradle/
+vendor/
+go-out.txt
+go-err.txt
