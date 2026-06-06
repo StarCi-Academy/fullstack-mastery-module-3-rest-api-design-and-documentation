@@ -3,37 +3,46 @@ using SwaggerDemo.Cat;
 using SwaggerDemo.Dog;
 using SwaggerDemo.Common;
 
+// WebApplication.CreateBuilder sets up configuration, logging, and DI container.
 var builder = WebApplication.CreateBuilder(args);
 
-// Port binding
+// Allow the port to be overridden via the PORT environment variable (useful for e2e parallel runs).
 var port = Environment.GetEnvironmentVariable("PORT") ?? "3000";
 builder.WebHost.UseUrls($"http://*:{port}");
 
-// Add services
+// Register domain services as Singleton so the in-memory store is shared across requests.
 builder.Services.AddSingleton<CatService>();
 builder.Services.AddSingleton<DogService>();
 
+// EnvelopeResultFilter wraps 2xx ObjectResult values in {statusCode, message, data, timestamp}.
+// ValidationProblem.Build replaces the default 400 ProblemDetails with the lesson error envelope.
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add<EnvelopeResultFilter>();
 })
 .ConfigureApiBehaviorOptions(options =>
 {
+    // Override the automatic 400 response factory so validation errors follow the same
+    // unified envelope structure as other error types.
     options.InvalidModelStateResponseFactory = ValidationProblem.Build;
 });
 
+// AddEndpointsApiExplorer tells the spec generator to scan Minimal API endpoints too.
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
+    // Document metadata shown at the top of the Swagger UI page.
     c.SwaggerDoc("v1", new OpenApiInfo
     {
         Title = "StarCi Academy Backend",
         Description = "API documentation for the REST API Design & Documentation lesson",
         Version = "1.0"
     });
+    // EnableAnnotations activates [SwaggerOperation] / [SwaggerResponse] on controllers.
     c.EnableAnnotations();
 
-    // Enable XML documentation integration
+    // Include XML doc comments (/// <summary>) in the spec so field descriptions appear in the UI.
+    // The project file must have <GenerateDocumentationFile>true</GenerateDocumentationFile>.
     var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     if (File.Exists(xmlPath))
@@ -41,7 +50,7 @@ builder.Services.AddSwaggerGen(c =>
         c.IncludeXmlComments(xmlPath);
     }
 
-    // Configure Bearer Authentication
+    // Declare the "bearer" HTTP security scheme so the UI renders the Authorize button.
     c.AddSecurityDefinition("bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -52,6 +61,8 @@ builder.Services.AddSwaggerGen(c =>
         Description = "JWT Authorization header using the Bearer scheme."
     });
 
+    // Apply the security requirement globally to every operation in this document.
+    // Individual operations can override with [AllowAnonymous] / empty security list.
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
@@ -63,23 +74,26 @@ builder.Services.AddSwaggerGen(c =>
                     Id = "bearer"
                 }
             },
-            Array.Empty<string>()
+            Array.Empty<string>()   // empty array = no specific scopes required
         }
     });
 });
 
 var app = builder.Build();
 
-// Middleware to rewrite /swagger-json and /swagger internally
+// Alias middleware: rewrite /swagger-json → /swagger/v1/swagger.json and
+// /swagger → /swagger/index.html so all four lang backends share the same URL surface.
 app.Use(async (context, next) =>
 {
     var path = context.Request.Path.Value;
     if (path == "/swagger-json")
     {
+        // Internal rewrite — no round-trip to client; Swashbuckle serves the rewritten path.
         context.Request.Path = "/swagger/v1/swagger.json";
     }
     else if (path == "/swagger")
     {
+        // Redirect so the browser updates its address bar to the canonical Swashbuckle UI path.
         context.Response.Redirect("/swagger/index.html");
         return;
     }

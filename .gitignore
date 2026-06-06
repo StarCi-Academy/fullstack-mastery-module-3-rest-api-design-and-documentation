@@ -54,3 +54,17 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 .vscode
 
 logs
+
+# Java build artifacts
+target/
+*.class
+*.jar
+
+# C# / .NET build artifacts
+bin/
+obj/
+
+# Go build artifacts
+*.exe
+*.test
+*.out

@@ -23,9 +23,13 @@ import {
 } from "./common"
 
 export async function bootstrap(): Promise<void> {
+    // Create the NestJS application instance from the root AppModule.
     const app = await NestFactory.create(AppModule)
+    // Reflector reads metadata set by decorators (e.g. @ResponseMessage) at runtime.
     const reflector = app.get(Reflector)
 
+    // whitelist strips unknown fields; forbidNonWhitelisted rejects them with 400;
+    // transform coerces primitives to their declared DTO types (string → number).
     app.useGlobalPipes(
         new ValidationPipe({
             whitelist: true,
@@ -33,9 +37,13 @@ export async function bootstrap(): Promise<void> {
             transform: true,
         }),
     )
+    // Wrap every success response in {statusCode, message, data, timestamp} envelope.
     app.useGlobalInterceptors(new TransformInterceptor(reflector))
+    // Convert any thrown exception to a unified JSON error envelope (no stack traces).
     app.useGlobalFilters(new AllExceptionsFilter())
 
+    // DocumentBuilder is the fluent API for the OpenAPI info object.
+    // addBearerAuth() adds the `bearer` security scheme to the spec's securitySchemes.
     const openApiConfig = new DocumentBuilder()
         .setTitle("StarCi Academy Backend")
         .setDescription("API documentation for the REST API Design & Documentation lesson")
@@ -43,16 +51,20 @@ export async function bootstrap(): Promise<void> {
         .addBearerAuth()
         .build()
 
+    // createDocument scans all controllers for @ApiTags/@ApiOperation/@ApiResponse
+    // and produces the full OpenAPI JSON document in memory.
     const document = SwaggerModule.createDocument(app,
         openApiConfig)
 
+    // Mount Scalar (alternative API explorer UI) at /scalar.
     app.use(
         "/scalar",
         apiReference({
-            content: document 
+            content: document
         }),
     )
 
+    // Mount the standard Swagger UI at /swagger and expose the JSON spec at /swagger-json.
     SwaggerModule.setup("swagger",
         app,
         document)

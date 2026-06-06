@@ -36,7 +36,9 @@ unknown> {
         context: ExecutionContext,
         next: CallHandler,
     ): Observable<unknown> {
+        // Read the HTTP status code before the handler runs so it is available in map().
         const statusCode = context.switchToHttp().getResponse().statusCode
+        // getAllAndOverride: handler metadata wins over class metadata; fall back to "Success".
         const message =
             this.reflector.getAllAndOverride<string>(RESPONSE_MESSAGE,
                 [
@@ -44,11 +46,12 @@ unknown> {
                     context.getClass(),
                 ]) ?? "Success"
 
+        // Pipe the handler's return value through the envelope transform.
         return next.handle().pipe(
             map((data) => ({
                 statusCode,
                 message,
-                data: data ?? null,
+                data: data ?? null,          // null-safe: guard against undefined responses
                 timestamp: new Date().toISOString(),
             })),
         )

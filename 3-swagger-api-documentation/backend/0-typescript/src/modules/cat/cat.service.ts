@@ -52,8 +52,9 @@ export class CatService {
      * always throws.
      */
     triggerDemoError(): never {
+        // Always throw so students can see the unified error envelope in action.
         throw new BadRequestException(
-            "ÄÃ¢y là lỗi giả lập Ä‘á»ƒ test Unified Error Response",
+            "Simulated error for Unified Error Response demo",
         )
     }
 }
