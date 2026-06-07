@@ -73,3 +73,16 @@ out/
 vendor/
 go-out.txt
 go-err.txt
+
+# Next.js
+.next/
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Env local
+.env.local
+
+# Test artifacts
+test-results/
+playwright-report/
